@@ -41,7 +41,7 @@ sequenceDiagram
         b->>-s: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
         s-->>b: data.json
 
-        note over b: once JSON file is fetched,<br/> JS's event handler is triggered, <br/>causing a DOM-API manipulation.
+        note over b: once JSON file is fetched,<br/> JS's event handler is triggered, <br/>which updates the notes array.
 
-        note over b: The final html code is rendered on the display. 
+        note over b: The final html code is rendered on the display without refreshing the page. 
 ```
