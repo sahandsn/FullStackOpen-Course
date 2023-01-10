@@ -5,11 +5,11 @@ const Header = (props) => (
 )
 
 const Part = (props) => (
-  <div>
+  <>
     <p>
       {props.part} {props.exercise}
     </p>
-  </div>
+  </>
 )
 
 const Content = (props) => (
