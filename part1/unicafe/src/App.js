@@ -16,7 +16,7 @@ const Button = (props) => {
 const Display = (props) => {
   return  (
     <>
-      <p>{props.text} {props.state}</p>
+      <p>{props.text} {props.state} {props.char}</p>
     </>
   )
 }
@@ -26,6 +26,11 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  let all = good + neutral + bad;
+  let score = good - bad
+  let average = score/all || 0
+  let positive = (good/all)*100 || 0
+  
 
   return (
     <>
@@ -40,6 +45,9 @@ const App = () => {
         <Display state={good} text={'good'} />
         <Display state={neutral} text={'neutral'} />
         <Display state={bad} text={'bad'} />
+        <Display state={all} text={'all'} />
+        <Display state={average} text={'average'} />
+        <Display state={positive} text={'positive'} char={'%'}/>
       </div>
       
     </>
