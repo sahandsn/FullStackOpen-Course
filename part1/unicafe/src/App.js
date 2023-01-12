@@ -16,7 +16,7 @@ const Button = ({setState, state, text}) => {
 const StatisticLine = ({text, value, char}) => {
   return  (
     <>
-      <p>{text} {value} {char}</p>
+      <p>{text}{value}{char}</p>
     </>
   )
 }
@@ -41,15 +41,36 @@ const Statistics = ({good, neutral, bad}) => {
 
   return (
     <>
-      <h1>statistics</h1>
-      <div>
-        <StatisticLine value={good} text={'good'} />
-        <StatisticLine value={neutral} text={'neutral'} />
-        <StatisticLine value={bad} text={'bad'} />
-        <StatisticLine value={all} text={'all'} />
-        <StatisticLine value={average} text={'average'} />
-        <StatisticLine value={positive} text={'positive'} char={'%'}/>
-      </div>
+    <h1>statistics</h1>
+      <table>
+        <tbody>
+          <tr>
+            <th><StatisticLine text={'good'}/></th>
+            <td><StatisticLine value={good}/></td>
+          </tr>
+          <tr>
+            <th><StatisticLine text={'neutral'}/></th>
+            <td><StatisticLine value={neutral}/></td>
+          </tr>
+          <tr>
+            <th><StatisticLine text={'bad'}/></th>
+            <td><StatisticLine value={bad}/></td>
+          </tr>
+          <tr>
+            <th><StatisticLine text={'all'}/></th>
+            <td><StatisticLine value={all}/></td>
+          </tr>
+          <tr>
+            <th><StatisticLine text={'average'}/></th>
+            <td><StatisticLine value={average.toFixed(1)}/></td>
+          </tr>
+          <tr>
+            <th><StatisticLine text={'positive'}/></th>
+            <td><StatisticLine value={positive.toFixed(1)}/></td>
+            <td><StatisticLine char={'%'}/></td>
+          </tr>
+        </tbody>
+      </table>
     </>
   )
 }
