@@ -14,7 +14,7 @@ const Button = ({text, onClick}) => {
 }
 
 
-// random number generator
+// pseudo random number generator
 const PRNG = (min, max) => {
   // the returned value is an integer between min and max numbers, inclusive
   min = Math.ceil(min)
@@ -25,6 +25,28 @@ const PRNG = (min, max) => {
   return random
 }
 
+
+// highest vote component
+const HighestVote = ({votes, anecdotes}) => {
+  
+  const highestVote = Math.max(...votes)
+  console.log(votes.indexOf(highestVote))
+  if(highestVote<=0){
+    return (
+      <>
+        <p>start voting!</p>
+      </>
+    )
+  }
+  return (
+    <>
+      <h1>Anecdote with most votes</h1>
+      <blockquote>{anecdotes[votes.indexOf(highestVote)]}</blockquote>
+      <p>has {highestVote} votes</p>
+    </>
+
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -54,10 +76,12 @@ const App = () => {
   
   return (
     <>
+      <h1>Anecdote of the day</h1>
       <blockquote>{anecdotes[selected]}</blockquote>
       <p>has {votes[selected]} votes</p>
       <Button text="vote" onClick={handleVote} />
       <Button text="next anecdote" onClick={handleNext} />
+      <HighestVote votes={votes} anecdotes={anecdotes} />
     </>
     
   )
