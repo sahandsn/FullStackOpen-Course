@@ -13,10 +13,10 @@ const Button = ({setState, state, text}) => {
 
 
 // display component
-const Display = ({text, state, char}) => {
+const StatisticLine = ({text, value, char}) => {
   return  (
     <>
-      <p>{text} {state} {char}</p>
+      <p>{text} {value} {char}</p>
     </>
   )
 }
@@ -36,19 +36,19 @@ const Statistics = ({good, neutral, bad}) => {
           <p>No feedback given</p>
         </div>
       </>
-    )
+    ) 
   }
 
   return (
     <>
       <h1>statistics</h1>
       <div>
-        <Display state={good} text={'good'} />
-        <Display state={neutral} text={'neutral'} />
-        <Display state={bad} text={'bad'} />
-        <Display state={all} text={'all'} />
-        <Display state={average} text={'average'} />
-        <Display state={positive} text={'positive'} char={'%'}/>
+        <StatisticLine value={good} text={'good'} />
+        <StatisticLine value={neutral} text={'neutral'} />
+        <StatisticLine value={bad} text={'bad'} />
+        <StatisticLine value={all} text={'all'} />
+        <StatisticLine value={average} text={'average'} />
+        <StatisticLine value={positive} text={'positive'} char={'%'}/>
       </div>
     </>
   )
