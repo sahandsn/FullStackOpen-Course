@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import './styles.css'
 
 // button compnent
-const Button = ({text, setState, random}) => {
+const Button = ({text, onClick}) => {
   return (
     <>
-      <button onClick={()=>setState(random)}>
+      <button onClick={onClick}>
         {text}
       </button>
     </>
@@ -36,12 +37,27 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
   ]
    
+  // states
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
+  // event handlers refrences
+  const handleVote = ()=>{
+    const newArr = [...votes]
+    newArr[selected]+=1
+    setVotes(newArr)
+  }
+
+  const handleNext = () => {
+    setSelected(PRNG(0, anecdotes.length-1))
+  }
+  
   return (
     <>
-      <p>{anecdotes[selected]}</p>
-      <Button text="next anecdote" setState={setSelected} random={() => PRNG(0, anecdotes.length-1)} />
+      <blockquote>{anecdotes[selected]}</blockquote>
+      <p>has {votes[selected]} votes</p>
+      <Button text="vote" onClick={handleVote} />
+      <Button text="next anecdote" onClick={handleNext} />
     </>
     
   )
