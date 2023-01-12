@@ -1,5 +1,33 @@
 import { useState } from 'react'
 
+// button compnent
+const Button = ({text, setState, random}) => {
+  return (
+    <>
+      <button onClick={()=>setState(random)}>
+        {text}
+      </button>
+    </>
+    
+  )
+}
+
+
+// random number generator
+const PRNG = (min, max) => {
+  // the returned value is an integer between min and max numbers, inclusive
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  
+  const random = Math.floor(Math.random()*(max-min+1)+min)
+  console.log(min)
+  console.log(max)
+  console.warn(random)
+  
+  return random
+}
+
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -14,9 +42,11 @@ const App = () => {
   const [selected, setSelected] = useState(0)
 
   return (
-    <div>
-      {anecdotes[selected]}
-    </div>
+    <>
+      <p>{anecdotes[selected]}</p>
+      <Button text="next anecdote" setState={setSelected} random={() => PRNG(0, anecdotes.length-1)} />
+    </>
+    
   )
 }
 
