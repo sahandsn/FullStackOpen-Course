@@ -20,9 +20,6 @@ const PRNG = (min, max) => {
   max = Math.floor(max)
   
   const random = Math.floor(Math.random()*(max-min+1)+min)
-  console.log(min)
-  console.log(max)
-  console.warn(random)
   
   return random
 }
