@@ -1,35 +1,52 @@
-const Course = (props) => {
-
+const Course = ({course}) => {
+  // console.log(course.parts[0].name)
+  return (
+    <>
+      <Header name={course.name}/>
+      <Content parts={course.parts}/>
+    </>
+  )
 }
 
-const Header = (props) => (
-    <h1>{props.course.name}</h1>
-)
 
-const Part = (props) => (
-  <>
-    <p>
-      {props.part.name} {props.exercise.exercises}
-    </p>
-  </>
+const Header = ({name}) => (
+    <h1>{name}</h1>
 )
 
 
-const Content = (props) => {
-  return (<div>
-    <Part part={props.parts[0]} exercise={props.parts[0]} />
-    <Part part={props.parts[1]} exercise={props.parts[1]} />
-    <Part part={props.parts[2]} exercise={props.parts[2]} />
+const Part = ({part, exercise}) => {
+  // console.log(exercise);
+  return (
+    <>
+      <p>
+        {part} {exercise}
+      </p>
+    </>
+  )
+  
+}
+
+
+const Content = ({parts}) => {
+  // console.log(parts)
+  return (
+    <div> 
+    {parts.map((element) => {
+      // console.log(element.id.toString())
+      return (
+        <Part part={element.name} exercise={element.exercises} key={element.id.toString()} />
+      )
+    })}
   </div>)
 }
 
 
-const Total = (props) => {
-  console.log(props)
-  return (<div>
-    <p>Number of exercises {props.exercises[0].exercises + props.exercises[1].exercises + props.exercises[2].exercises}</p>
-  </div>)
-}
+// const Total = (props) => {
+//   console.log(props)
+//   return (<div>
+//     <p>Number of exercises {props.exercises[0].exercises + props.exercises[1].exercises + props.exercises[2].exercises}</p>
+//   </div>)
+// }
 
 
 const App = () => {
@@ -57,5 +74,6 @@ const App = () => {
 
   return <Course course={course} />
 }
+
 
 export default App
