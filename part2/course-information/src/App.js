@@ -41,12 +41,14 @@ const Content = ({parts}) => {
 }
 
 
-// const Total = (props) => {
-//   console.log(props)
-//   return (<div>
-//     <p>Number of exercises {props.exercises[0].exercises + props.exercises[1].exercises + props.exercises[2].exercises}</p>
-//   </div>)
-// }
+const Total = ({parts}) => {
+  // console.log()
+  return (<div>
+    <strong>
+      totoal of {parts.reduce((total, current)=>{return (total+current.exercises)}, 0)} exercises
+    </strong>
+  </div>)
+}
 
 
 const App = () => {
@@ -72,7 +74,12 @@ const App = () => {
     ]
   }
 
-  return <Course course={course} />
+  return (
+    <>
+      <Course course={course} />
+      <Total parts={course.parts} />
+    </>
+  )
 }
 
 
