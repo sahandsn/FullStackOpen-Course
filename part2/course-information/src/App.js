@@ -120,14 +120,29 @@ const App = () => {
           id: 2
         }
       ]
+    },
+    {
+      name: 'Test',
+      id: 3,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3000,
+          id: 1
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2
+        }
+      ]
     }
   ]
 
   return (
     <>
       <h1>Web development Curriculum</h1>
-      <Course course={courses[0]} />
-      <Course course={courses[1]} />
+      {courses.map((ele)=><Course course={ele} key={ele.id}/>)}
       <GrandTotal courses={courses} />
     </>
   )
