@@ -45,7 +45,7 @@ const Total = ({parts}) => {
   // console.log()
   return (<div>
     <strong>
-      totoal of {parts.reduce((total, current)=>{return (total+current.exercises)}, 0)} exercises
+      total of {parts.reduce((total, current)=>{return (total+current.exercises)}, 0)} exercises
     </strong>
   </div>)
 }
@@ -70,6 +70,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
