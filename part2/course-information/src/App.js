@@ -142,7 +142,7 @@ const App = () => {
   return (
     <>
       <h1>Web development Curriculum</h1>
-      {courses.map((ele)=><Course course={ele} key={ele.id}/>)}
+      {courses.map((ele)=><Course course={ele} key={ele.id.toString()}/>)}
       <GrandTotal courses={courses} />
     </>
   )
