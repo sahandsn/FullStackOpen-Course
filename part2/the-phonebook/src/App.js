@@ -8,9 +8,16 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const obj = {name: newName}
-    setPersons(persons.concat(obj))
-    setNewName("")
+    if(persons.map(obj=>obj.name).includes(newName)){
+      alert(`${newName} is already added to the phonebook`)
+      setNewName("")
+    }
+    else{
+      const obj = {name: newName}
+      setPersons(persons.concat(obj))
+      setNewName("")
+    }
+    
   }
 
   const typing = (event) => {
