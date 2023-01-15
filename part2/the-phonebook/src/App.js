@@ -1,28 +1,89 @@
 import { useState } from 'react'
 
-const Search = ({persons, newSearch}) => {
-  if (newSearch===""){
+const Search = ({persons, newSearchValue, searchOnChange}) => {
+  if (newSearchValue===""){
     return(
-      <p>type name to find</p>
+      <>
+        <h2>Search</h2>
+        <div>
+          <Input text={'Search name with'} value={newSearchValue} onChange={searchOnChange} />
+          <p>type name to find</p>
+        </div>
+      </>
     )
   }
-  // console.log(newSearch)
-  const regex = new RegExp(newSearch, "ig")
-  // console.log(regex.test(persons[0].name));
+
+  const regex = new RegExp(newSearchValue, "ig")
   let matchedNames = persons.filter((ele)=>regex.test(ele.name))
-  // console.log(matchedNames)
   if(matchedNames.length === 0){
     return (
-      <p>No Match!</p>
+      <>
+        <h2>Search</h2>
+        <div>
+          <Input text={'Search name with'} value={newSearchValue} onChange={searchOnChange} />
+          <p>No Match!</p>
+        </div>
+      </>
     )
   }
 
   return (
+    <>
+      <h2>Search</h2>
+      <div>
+        <Input text={'Search name with'} value={newSearchValue} onChange={searchOnChange} />
+        <Contacts list={matchedNames}/>
+      </div>
+    </>
+    
+  )
+}
+
+
+const Contacts = ({list}) => {
+  return (
     <ul>
-      {matchedNames.map((ele)=><li key={ele.name}>{ele.name}; {ele.number}</li>)}
+      {list.map((ele)=><li key={ele.name}>{ele.name}; {ele.number}</li>)}
     </ul>
   )
-  
+}
+
+
+const Add = ({onSubmit, nameValue, nameOnChange, numberValue, numberOnChange}) => {
+  return (
+    <>
+      <h2>Add</h2>
+      <div>
+        <form onSubmit={onSubmit}>
+          <Input text={'name'} value={nameValue} onChange={nameOnChange} />
+          <Input text={'number'} value={numberValue} onChange={numberOnChange} />
+          <div>
+            <button type="submit">add</button>
+          </div>
+        </form>
+      </div>
+    </>
+  )
+}
+
+const List = ({persons}) => {
+  return (
+    <>
+      <h2>List</h2>
+      <div>
+        <Contacts list={persons} />  
+      </div>
+    </>
+  )
+}
+
+const Input = ({text, value, onChange}) => {
+  return (
+    <div>
+      {text}: <input onChange={onChange} value={value}/>
+    </div>
+    
+  )
 }
 
 const App = () => {
@@ -44,13 +105,13 @@ const App = () => {
       setNewName("")
       setNewNumber("")
     }
-    // e,pty field
+    // empty field
     else if(newName==="" || newNumber===""){
       alert(`both fields of Add section should be filled`)
     }
     // no error
     else{
-      const obj = {name: newName, number: newNumber}
+      const obj = {name: newName.trim(), number: newNumber}
       setPersons(persons.concat(obj))
       setNewName("")
       setNewNumber("")
@@ -71,28 +132,13 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      <h2>Search</h2>
-      <div>
-        Search name with: <input value={newSearch} onChange={typingSearch}/>
-        <Search persons={persons} newSearch={newSearch} />
-      </div>
-      <h2>Add</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          name: <input value={newName} onChange={typingName}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={typingNumber}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>List</h2>
-      {persons.map((ele)=><p key={ele.name}>{ele.name}; {ele.number}</p>)}
+      <Search persons={persons} newSearchValue={newSearch} searchOnChange={typingSearch}/>
+      <Add onSubmit={handleSubmit} nameValue={newName} nameOnChange={typingName} numberValue={newNumber} numberOnChange={typingNumber} />
+      <List persons={persons}/>
     </>
   )
 }
+
 
 
 export default App
