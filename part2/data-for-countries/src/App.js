@@ -11,7 +11,7 @@ const Input = ({text, value, onChange}) => {
 }
 
 
-const CountryFinder = ({countries, search}) => {
+const CountryFinder = ({countries, search, setSearch}) => {
   // have not typed any thing
   if(search === ""){
     return (
@@ -43,14 +43,19 @@ const CountryFinder = ({countries, search}) => {
     )
   }
 
+  const CountryProfileHandler = (event) => {
+    // console.log(event.target.value);
+    setSearch(event.target.value)
+  }
   // [2,10] countries matched this search
   if(matchedCountries.length<=10 && matchedCountries.length>=2){
     return (
       <div>
         <ul>
           {matchedCountries.map(obj=>{
+            // console.log(obj.name.common);
             return (
-              <li key={obj.cca3}>{obj.name.common}; {obj.name.official}</li>
+              <li key={obj.cca3}>{obj.name.common}; {obj.name.official} <button value={obj.name.common} onClick={CountryProfileHandler}>show</button></li>
             )
           })}
         </ul>
@@ -61,35 +66,41 @@ const CountryFinder = ({countries, search}) => {
   // country found!
   if(matchedCountries.length === 1){
     return (
-      <>
-        <h2>{matchedCountries[0].name.common}</h2>
-        <figure>
-          <img alt={matchedCountries[0].name.common} src={matchedCountries[0].flags.png} loading="eager" />
-          <figcaption>{matchedCountries[0].name.official}</figcaption>
-        </figure>
-        <h3>Geography</h3>
-        <div>
-          <b>Capital(s):</b>
-          <ul>
-            {matchedCountries[0].capital.map((city)=><li key={city}>{city}</li>)}
-          </ul>
-          <p><b>Area(km<sup>2</sup>):</b> {new Intl.NumberFormat().format(matchedCountries[0].area)}</p>
-        </div>
-        
-        <h3>Anthropology</h3>
-        <div>
-          <p><b>Population:</b> {new Intl.NumberFormat().format(matchedCountries[0].population)}</p>
-          <b>Language(s):</b>
-          <ul>
-            {Object.keys(matchedCountries[0].languages).map((lang)=><li key={lang}>{matchedCountries[0].languages[lang]}</li>)}
-          </ul>
-        </div>
-      </>
-      
+      <CountryProfile country={matchedCountries[0]} />
     )
   }
 }
 
+const CountryProfile = ({country}) => {
+  return (
+    <>
+        <h2>{country.name.common}</h2>
+
+        <figure>
+          <img alt={country.name.common} src={country.flags.png} loading="eager" />
+          <figcaption>{country.name.official}</figcaption>
+        </figure>
+
+        <h3>Geography</h3>
+        <ul>
+          <b>Capital(s):</b>
+            <ul>
+              {country.capital.map((city)=><li key={city}>{city}</li>)}
+            </ul>
+          <p><b>Area(km<sup>2</sup>):</b> {new Intl.NumberFormat().format(country.area)}</p>
+        </ul>
+        
+        <h3>Anthropology</h3>
+        <ul>
+        <b>Language(s):</b>
+          <ul>
+            {Object.keys(country.languages).map((lang)=><li key={lang}>{country.languages[lang]}</li>)}
+          </ul>
+          <p><b>Population:</b> {new Intl.NumberFormat().format(country.population)}</p>
+        </ul>
+      </>
+  )
+}
 
 function App() {
 
@@ -116,9 +127,9 @@ function App() {
 
   return (
     <>
-      <h1>Country Finder</h1>
+      <h1>Explore Countries</h1>
       <Input text={'find countries:'} value={search} onChange={searchOnChange} />
-      <CountryFinder countries={countries} search={search} />
+      <CountryFinder countries={countries} search={search.trim()} setSearch={setSearch}/>
     </>
   );
 }
