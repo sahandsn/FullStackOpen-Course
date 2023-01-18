@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from "axios"
+import services from './components/services.js'
 
 
 const Search = ({persons, newSearchValue, searchOnChange}) => {
@@ -15,8 +15,10 @@ const Search = ({persons, newSearchValue, searchOnChange}) => {
     )
   }
 
-  const regex = new RegExp(newSearchValue, "ig")
-  let matchedNames = persons.filter((ele)=>regex.test(ele.name))
+  const regex = new RegExp(newSearchValue, "i")
+  // console.log(regex);
+  let matchedNames = persons.filter(ele=>regex.test(ele.name))
+
   if(matchedNames.length === 0){
     return (
       <>
@@ -99,16 +101,13 @@ const App = () => {
 
   // fetch data from json-server
   useEffect(()=>{
-    console.log("promise pending...");
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response=>{
-        console.log("promise resolved")
-        setPersons(response.data)
-      })
+    services
+    .getAll()
+    .then(({data})=>setPersons(data))
   },[])
-  // console.log(persons);
+ 
 
+  // handlers
   const handleSubmit = (event) => {
     event.preventDefault()
     // used name
@@ -121,16 +120,21 @@ const App = () => {
     else if(newName==="" || newNumber===""){
       alert(`both fields of Add section should be filled`)
     }
-    // no error
+    // no error(add this name/number)
     else{
       const obj = {name: newName.trim(), number: newNumber}
-      setPersons(persons.concat(obj))
+      services
+      .createNew(obj)
+      .then(({data})=>{
+        // console.log(data);
+        setPersons(persons.concat(data))
+        // console.log('added');
+      })
       setNewName("")
       setNewNumber("")
     }
     
   }
-
   const typingName = (event) => {
     setNewName(event.target.value)
   }
