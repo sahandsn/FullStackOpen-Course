@@ -18,6 +18,28 @@ const createNew = (obj) => {
     return axios.post(baseurl, obj)
 }
 
+const deleteObj = (id) => {
+    const confirmation = new Promise((resolve, reject)=>{
+        if(window.confirm('delete?')){
+            resolve()
+        }else{
+            reject()
+        }
+    })
+    // console.log(`${baseurl}/${id}`);
+    // if promise fulfilled retrun the id of the deleted obj
+    return confirmation
+            .then(()=>axios.delete(`${baseurl}/${id}`))
+            .then(()=>id, (err) =>{
+                // console.log(err);
+                if(err!==undefined){
+                    alert(err.response.statusText)
+                }
+                return -1
+            })
 
-const Export = {getAll, createNew}
+    
+}
+
+const Export = {getAll, createNew, deleteObj}
 export default Export

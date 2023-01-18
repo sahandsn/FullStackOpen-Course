@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import services from './components/services.js'
 
 
-const Search = ({persons, newSearchValue, searchOnChange}) => {
+const Search = ({persons, newSearchValue, searchOnChange, deleteHandler}) => {
   if (newSearchValue===""){
     return(
       <>
@@ -36,7 +36,7 @@ const Search = ({persons, newSearchValue, searchOnChange}) => {
       <h2>Search</h2>
       <div>
         <Input text={'Search name with'} value={newSearchValue} onChange={searchOnChange} />
-        <Contacts list={matchedNames}/>
+        <Contacts list={matchedNames} deleteHandler={deleteHandler}/>
       </div>
     </>
     
@@ -44,10 +44,10 @@ const Search = ({persons, newSearchValue, searchOnChange}) => {
 }
 
 
-const Contacts = ({list}) => {
+const Contacts = ({list, deleteHandler}) => {
   return (
     <ul>
-      {list.map((ele)=><li key={ele.name}>{ele.name}; {ele.number}</li>)}
+      {list.map((ele)=><li key={ele.name}>{ele.name}; {ele.number} <button onClick={deleteHandler} id={ele.id}>delete</button></li>)}
     </ul>
   )
 }
@@ -70,12 +70,12 @@ const Add = ({onSubmit, nameValue, nameOnChange, numberValue, numberOnChange}) =
   )
 }
 
-const List = ({persons}) => {
+const List = ({persons, deleteHandler}) => {
   return (
     <>
       <h2>List</h2>
       <div>
-        <Contacts list={persons} />  
+        <Contacts list={persons} deleteHandler={deleteHandler}/>  
       </div>
     </>
   )
@@ -93,13 +93,12 @@ const Input = ({text, value, onChange}) => {
 const App = () => {
   // states of the App root component
   const [persons, setPersons] = useState([
-    { name: 'LOADING NAMES', number: 'LOADING NUMBERS'},
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
 
-  // fetch data from json-server
+  // fetch data from json-server on the first load of the app
   useEffect(()=>{
     services
     .getAll()
@@ -144,13 +143,27 @@ const App = () => {
   const typingSearch = (event) => {
     setNewSearch(event.target.value)
   }
+  const deleteHandler = (event) => {
+    services
+    .deleteObj(event.target.id)
+    .then(id=>setPersons(persons.filter(ele=>{
+      // console.log(typeof ele.id);
+      // console.log(id);
+      // console.log(ele.id != id);
+      return Number(ele.id) !== Number(id)
+    })))
+    .catch(err=>{
+      // console.log(err);
+      alert(err.response.statusText)
+    })
+  }
 
   return (
     <>
       <h1>Phonebook</h1>
-      <Search persons={persons} newSearchValue={newSearch} searchOnChange={typingSearch}/>
+      <Search persons={persons} newSearchValue={newSearch} searchOnChange={typingSearch} deleteHandler={deleteHandler}/>
       <Add onSubmit={handleSubmit} nameValue={newName} nameOnChange={typingName} numberValue={newNumber} numberOnChange={typingNumber} />
-      <List persons={persons}/>
+      <List persons={persons} deleteHandler={deleteHandler}/>
     </>
   )
 }
