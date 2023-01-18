@@ -47,7 +47,7 @@ const Search = ({persons, newSearchValue, searchOnChange, deleteHandler}) => {
 const Contacts = ({list, deleteHandler}) => {
   return (
     <ul>
-      {list.map((ele)=><li key={ele.name}>{ele.name}; {ele.number} <button onClick={deleteHandler} id={ele.id}>delete</button></li>)}
+      {list.map((ele)=><li key={ele.name}>{ele.name}; {ele.number} <button onClick={() => deleteHandler(ele)}>delete</button></li>)}
     </ul>
   )
 }
@@ -110,8 +110,15 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     // used name
-    if(persons.map(obj=>obj.name).includes(newName)){
-      alert(`${newName} is already added to the phonebook`)
+    const currentObj = persons.find((ele)=>ele.name===newName.trim())
+    if(currentObj!==undefined){
+      const confirmation = window.confirm(`${newName.trim()} is already added to the phonebook, modify the number with the new one?`)
+      if(confirmation===true){
+        services
+          .partialUpdate(currentObj.id, {number: newNumber})
+          .then(({data})=>setPersons(persons.map((ele)=>ele.id!==data.id?ele:data)))
+          .catch((response)=>alert(response.response.statusText))
+      }
       setNewName("")
       setNewNumber("")
     }
@@ -143,9 +150,10 @@ const App = () => {
   const typingSearch = (event) => {
     setNewSearch(event.target.value)
   }
-  const deleteHandler = (event) => {
+  const deleteHandler = (ele) => {
+    // console.log(ele);
     services
-    .deleteObj(event.target.id)
+    .deleteObj(ele)
     .then(id=>setPersons(persons.filter(ele=>{
       // console.log(typeof ele.id);
       // console.log(id);

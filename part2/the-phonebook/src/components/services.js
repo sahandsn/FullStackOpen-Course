@@ -18,19 +18,20 @@ const createNew = (obj) => {
     return axios.post(baseurl, obj)
 }
 
-const deleteObj = (id) => {
+const deleteObj = (obj) => {
+    // console.log(obj);
     const confirmation = new Promise((resolve, reject)=>{
-        if(window.confirm('delete?')){
+        if(window.confirm(`Delete ${obj.name}?`)){
             resolve()
         }else{
             reject()
         }
     })
-    // console.log(`${baseurl}/${id}`);
+    
     // if promise fulfilled retrun the id of the deleted obj
     return confirmation
-            .then(()=>axios.delete(`${baseurl}/${id}`))
-            .then(()=>id, (err) =>{
+            .then(()=>axios.delete(`${baseurl}/${obj.id}`))
+            .then(()=>obj.id, (err) =>{
                 // console.log(err);
                 if(err!==undefined){
                     alert(err.response.statusText)
@@ -41,5 +42,11 @@ const deleteObj = (id) => {
     
 }
 
-const Export = {getAll, createNew, deleteObj}
+const partialUpdate = (id, obj) => {
+    // console.log(obj);
+    return axios
+            .patch(`${baseurl}/${id}`, obj)
+}
+
+const Export = {getAll, createNew, deleteObj, partialUpdate}
 export default Export
