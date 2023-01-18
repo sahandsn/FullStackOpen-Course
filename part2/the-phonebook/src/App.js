@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from "axios"
 
+
 const Search = ({persons, newSearchValue, searchOnChange}) => {
   if (newSearchValue===""){
     return(
@@ -149,7 +150,6 @@ const App = () => {
     </>
   )
 }
-
 
 
 export default App
