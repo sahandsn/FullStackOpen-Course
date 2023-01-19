@@ -1,12 +1,27 @@
 import styles from "./Notification.module.css"
 
-const Notification = ({message}) => {
+const Notification = ({message:{message, mode}}) => {
+    // console.log(message);
     if(message===null){
         return null
     }
-    return(
-        <div className={styles.green}>{message}</div>
-    )
+    if(mode==='green'){
+        return(
+            <div className={styles.green}>{message}</div>
+        )
+    }
+    else if(mode==='red'){
+        return(
+            <div className={styles.red}>{message}</div>
+        )
+    }
+    // user modified the input
+    else{
+        return(
+            <div className={styles.gray}>{message}</div>
+        )
+    }
+    
 }
 
 

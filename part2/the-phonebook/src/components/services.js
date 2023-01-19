@@ -31,13 +31,8 @@ const deleteObj = (obj) => {
     // if promise fulfilled retrun the id of the deleted obj
     return confirmation
             .then(()=>axios.delete(`${baseurl}/${obj.id}`))
-            .then(()=>obj.id, (err) =>{
-                // console.log(err);
-                if(err!==undefined){
-                    alert(err.response.statusText)
-                }
-                return 'qwertyhn'
-            })
+            .then(()=>Number(obj.id))
+            .catch((err)=>Promise.reject(err) )
 
     
 }

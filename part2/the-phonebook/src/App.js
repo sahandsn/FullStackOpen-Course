@@ -13,7 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState({message:null, mode:'green'})
 
   // fetch data from json-server on the first load of the app
   useEffect(()=>{
@@ -26,7 +26,7 @@ const App = () => {
   // handlers
   const handleMessage = (newMessage) => {
     setMessage(newMessage)
-    setTimeout(()=>setMessage(null), 5000)
+    setTimeout(()=>setMessage({...message, message:null}), 4000)
   }
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -39,7 +39,7 @@ const App = () => {
           .partialUpdate(currentObj.id, {number: newNumber})
           .then(({data})=>{
             setPersons(persons.map((ele)=>ele.id!==data.id?ele:data))
-            handleMessage(`Modified ${newName}`)
+            handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
           })
           .catch((response)=>alert(response.response.statusText))
       }
@@ -60,7 +60,7 @@ const App = () => {
       .then(({data})=>{
         // console.log(data);
         setPersons(persons.concat(data))
-        handleMessage(`Added ${obj.name}`)
+        handleMessage({...message, message:`Added ${obj.name}`, mode:'green'})
         // console.log('added');
       })
       setNewName("")
@@ -77,37 +77,38 @@ const App = () => {
   const typingSearch = (event) => {
     setNewSearch(event.target.value)
   }
-  const deleteHandler = (ele) => {
+  const handleDelete = (obj) => {
     // console.log(ele);
     services
-    .deleteObj(ele)
+    .deleteObj(obj)
     .then(id=>{
-      
-      setPersons(persons.filter(ele=>{
-        // console.log(typeof ele.id);
-        // console.log(id);
-        // console.log(ele.id != id);
-        
-        return Number(ele.id) !== Number(id)
-      }))
+        setPersons(persons.filter(ele=> ele.id !== id))
+        handleMessage({...message, message:`Information of ${obj.name} is removed from server`, mode:'green'})
+      }
+    )
+    .catch((err)=>{
+      // tried to delete a non-existing(already deleted) obj
+      if(err!==undefined){
+        setPersons(persons.filter(ele=> obj.id !== ele.id))
+        handleMessage({...message, message:`Information of ${obj.name} has already been removed from server`, mode:'red'})
+      }
+
+      // did not approave the deletion though window.confirm
+    })
     
-    })
-    .catch(err=>{
-      // console.log(err);
-      alert(err.response.statusText)
-    })
   }
 
+  // render to screen
   return (
     <>
       <h1>Phonebook</h1>
-      <Notification message={message} />
+      <Notification message={message}/>
       <h2>Search</h2>
-      <Search persons={persons} newSearchValue={newSearch} searchOnChange={typingSearch} deleteHandler={deleteHandler}/>
+      <Search persons={persons} newSearchValue={newSearch} searchOnChange={typingSearch} deleteHandler={handleDelete}/>
       <h2>Add</h2>
       <Add onSubmit={handleSubmit} nameValue={newName} nameOnChange={typingName} numberValue={newNumber} numberOnChange={typingNumber} />
       <h2>List</h2>
-      <Contacts list={persons} deleteHandler={deleteHandler}/>
+      <Contacts list={persons} deleteHandler={handleDelete}/>
     </>
   )
 }
