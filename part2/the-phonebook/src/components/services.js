@@ -36,7 +36,7 @@ const deleteObj = (obj) => {
                 if(err!==undefined){
                     alert(err.response.statusText)
                 }
-                return -1
+                return 'qwertyhn'
             })
 
     
