@@ -1,0 +1,12 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "testing",
+    "start": "node index.js"
+  },
+  "author": "sahand",
+  "license": "ISC"
+}
