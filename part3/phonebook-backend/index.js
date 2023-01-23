@@ -4,7 +4,10 @@ const morgan = require('morgan')
 
 const app = express()
 app.use(express.json())
-app.use(morgan('tiny', 'immediate'))
+
+morgan.token('content', (req)=>JSON.stringify(req.body))
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :content"))
+
 
 let notes = [
     { 
@@ -56,7 +59,7 @@ app.get("/api/persons/:id", (req, res)=>{
 app.delete("/api/persons/:id", (req,res)=>{
     const id = Number(req.params.id)
     notes = notes.filter(n=>n.id!==id)
-    res.status(204)  
+    res.status(204).end() 
 })
 
 
@@ -69,7 +72,7 @@ const randomNumber = () => {
 
 app.post("/api/persons",(req,res)=>{
     const body  = req.body
-    // console.log(req.body);
+    // console.log(body);
     // console.log(body.name);
     // console.log(body.number);
     if(!body.name || !body.number){
@@ -90,3 +93,4 @@ app.post("/api/persons",(req,res)=>{
 
 const PORT = 3001
 app.listen(PORT)
+console.log(`server running on port ${PORT}`);
