@@ -28,7 +28,7 @@ const notes = [
 ]
 
 
-app.get("/api/notes",(req,res)=>{
+app.get("/api/persons",(req,res)=>{
     res.json(notes)
 })
 
