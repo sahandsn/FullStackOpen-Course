@@ -2,6 +2,7 @@ const express = require("express")
 
 
 const app = express()
+app.use(express.json())
 
 
 let notes = [
@@ -54,8 +55,32 @@ app.get("/api/persons/:id", (req, res)=>{
 app.delete("/api/persons/:id", (req,res)=>{
     const id = Number(req.params.id)
     notes = notes.filter(n=>n.id!==id)
-    res.status(204)
-    
+    res.status(204)  
+})
+
+
+const randomNumber = () => {
+    const random = Math.floor(Math.random() * (100000000-1+1) + 1)
+    // console.log(random);
+    return random
+}
+
+
+app.post("/api/persons",(req,res)=>{
+    const body  = req.body
+    // console.log(req.body);
+    // console.log(body.name);
+    // console.log(body.number);
+    if(!body.name || !body.number){
+        return res.status(400).end("Missing name/number.")
+    }
+    const note = {
+        id : randomNumber(),
+        name: body.name,
+        number: req.body.number,
+    }
+    notes = notes.concat(note)
+    res.status(200).send(`${body.name} added to phonebook.`)
 })
 
 
