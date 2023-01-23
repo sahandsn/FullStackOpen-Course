@@ -72,7 +72,10 @@ app.post("/api/persons",(req,res)=>{
     // console.log(body.name);
     // console.log(body.number);
     if(!body.name || !body.number){
-        return res.status(400).end("Missing name/number.")
+        return res.status(400).json({error: 'Missing name/number'})
+    }
+    if(notes.find(n=>n.name.toUpperCase() === body.name.trim().toUpperCase())){
+        return res.status(400).json({error: `${body.name.trim()} already used in Phonebook.`})
     }
     const note = {
         id : randomNumber(),
@@ -80,7 +83,7 @@ app.post("/api/persons",(req,res)=>{
         number: req.body.number,
     }
     notes = notes.concat(note)
-    res.status(200).send(`${body.name} added to phonebook.`)
+    res.status(200).send(`${body.name} added to Phonebook.`)
 })
 
 
