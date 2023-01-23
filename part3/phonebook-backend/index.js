@@ -39,5 +39,17 @@ app.get("/info", (req, res)=>{
 })
 
 
+app.get("/api/persons/:id", (req, res)=>{
+    const id = Number(req.params.id)
+    const note = notes.find(n=>n.id===id)
+    if(note){
+        res.json(note)
+    }
+    else{
+        res.status(404).send('Not Found!')
+    }
+})
+
+
 const PORT = 3001
 app.listen(PORT)
