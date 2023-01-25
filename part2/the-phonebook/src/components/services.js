@@ -1,11 +1,11 @@
 import axios from "axios"
 
-const baseurl = 'http://localhost:3001/persons'
+const baseurl = 'http://localhost:3001'
 
 const getAll = () => {
     // console.log("promise pending ...");
     return axios
-            .get(baseurl)
+            .get(`${baseurl}/api/persons`)
             // instead of the below, use destructive parameter
             // .then(response => {
             //     // console.log("promise resolved/rejected");
@@ -15,7 +15,7 @@ const getAll = () => {
 
 const createNew = (obj) => {
     // console.log('creating');
-    return axios.post(baseurl, obj)
+    return axios.post(`${baseurl}/api/persons`, obj)
 }
 
 const deleteObj = (obj) => {
@@ -30,7 +30,7 @@ const deleteObj = (obj) => {
     
     // if promise fulfilled retrun the id of the deleted obj
     return confirmation
-            .then(()=>axios.delete(`${baseurl}/${obj.id}`))
+            .then(()=>axios.delete(`${baseurl}/api/persons/${obj.id}`))
             .then(()=>Number(obj.id))
             .catch((err)=>Promise.reject(err) )
 

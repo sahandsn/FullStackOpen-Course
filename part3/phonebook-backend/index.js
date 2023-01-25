@@ -1,9 +1,12 @@
 const express = require("express")
 const morgan = require('morgan')
+const cors = require('cors')
 
 
 const app = express()
 app.use(express.json())
+app.use(cors())
+
 
 morgan.token('content', (req)=>JSON.stringify(req.body))
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :content"))
@@ -84,13 +87,12 @@ app.post("/api/persons",(req,res)=>{
     const note = {
         id : randomNumber(),
         name: body.name,
-        number: req.body.number,
+        number: body.number
     }
     notes = notes.concat(note)
-    res.status(200).send(`${body.name} added to Phonebook.`)
+    res.status(200).json(note)
 })
 
 
 const PORT = 3001
-app.listen(PORT)
-console.log(`server running on port ${PORT}`);
+app.listen(PORT, () => console.log(`server running on port ${PORT}`))

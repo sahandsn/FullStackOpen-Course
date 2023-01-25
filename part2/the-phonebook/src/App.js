@@ -8,8 +8,7 @@ import Notification from "./components/Notification/Notification.js"
 
 const App = () => {
   // states of the App root component
-  const [persons, setPersons] = useState([
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
