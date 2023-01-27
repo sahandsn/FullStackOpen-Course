@@ -31,7 +31,7 @@ const deleteObj = (obj) => {
     // if promise fulfilled retrun the id of the deleted obj
     return confirmation
             .then(()=>axios.delete(`${baseurl}/api/persons/${obj.id}`))
-            .then(()=>Number(obj.id))
+            .then(()=>obj.id)
             .catch((err)=>Promise.reject(err) )
 
     
