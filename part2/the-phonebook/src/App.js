@@ -30,24 +30,24 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     // used name(nodify the number)
-    const currentObj = persons.find((ele)=>ele.name===newName.trim())
-    if(currentObj!==undefined){
-      const confirmation = window.confirm(`${newName.trim()} is already added to the phonebook, modify the number with the new one?`)
-      if(confirmation===true){
-        services
-          .partialUpdate(currentObj.id, {number: newNumber})
-          .then(({data})=>{
-            setPersons(persons.map((ele)=>ele.id!==data.id?ele:data))
-            handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
-          })
-          .catch((response)=>alert(response.response.statusText))
-      }
-      setNewName("")
-      setNewNumber("")
-    }
+    // const currentObj = persons.find((ele)=>ele.name===newName.trim())
+    // if(currentObj!==undefined){
+    //   const confirmation = window.confirm(`${newName.trim()} is already added to the phonebook, modify the number with the new one?`)
+    //   if(confirmation===true){
+    //     services
+    //       .partialUpdate(currentObj.id, {number: newNumber})
+    //       .then(({data})=>{
+    //         setPersons(persons.map((ele)=>ele.id!==data.id?ele:data))
+    //         handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
+    //       })
+    //       .catch((response)=>alert(response.response.statusText))
+    //   }
+    //   setNewName("")
+    //   setNewNumber("")
+    // }
 
     // empty field
-    else if(newName==="" || newNumber===""){
+    if(newName==="" || newNumber===""){
       alert(`both fields of Add section should be filled`)
     }
 
