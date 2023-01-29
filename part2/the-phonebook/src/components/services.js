@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseurl = 'https://phonebook-production.up.railway.app'
+const baseurl = 'http://localhost:3001'
 
 const getAll = () => {
     // console.log("promise pending ...");
@@ -37,11 +37,13 @@ const deleteObj = (obj) => {
     
 }
 
-const partialUpdate = (id, obj) => {
+const personUpdate = (id, obj) => {
     // console.log(obj);
     return axios
-            .patch(`${baseurl}/${id}`, obj)
+            .put(`${baseurl}/api/persons/${id}`, obj)
+            .then(result => result)
+            .catch(err => console.warn(err))
 }
 
-const Export = {getAll, createNew, deleteObj, partialUpdate}
+const Export = {getAll, createNew, deleteObj, personUpdate}
 export default Export

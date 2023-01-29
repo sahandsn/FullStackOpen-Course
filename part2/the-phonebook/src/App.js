@@ -30,41 +30,46 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     // used name(nodify the number)
-    // const currentObj = persons.find((ele)=>ele.name===newName.trim())
-    // if(currentObj!==undefined){
-    //   const confirmation = window.confirm(`${newName.trim()} is already added to the phonebook, modify the number with the new one?`)
-    //   if(confirmation===true){
-    //     services
-    //       .partialUpdate(currentObj.id, {number: newNumber})
-    //       .then(({data})=>{
-    //         setPersons(persons.map((ele)=>ele.id!==data.id?ele:data))
-    //         handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
-    //       })
-    //       .catch((response)=>alert(response.response.statusText))
-    //   }
-    //   setNewName("")
-    //   setNewNumber("")
-    // }
-
-    // empty field
-    if(newName==="" || newNumber===""){
-      alert(`both fields of Add section should be filled`)
-    }
-
-    // no error(add this name/number)
-    else{
-      const obj = {name: newName.trim(), number: newNumber}
-      services
-      .createNew(obj)
-      .then(({data})=>{
-        // console.log(data);
-        setPersons(persons.concat(data))
-        handleMessage({...message, message:`Added ${obj.name}`, mode:'green'})
-        // console.log('added');
-      })
+    const currentObj = persons.find((ele)=>ele.name===newName.trim())
+    // console.log(currentObj);
+    if(currentObj!==undefined){
+      const confirmation = window.confirm(`${newName.trim()} is already added to the phonebook, modify the number with the new one?`)
+      if(confirmation===true){
+        services
+          .personUpdate(currentObj.id, {number: newNumber, name: newName.trim()})
+          .then(({data})=>{
+            // console.log(data);
+            setPersons(persons.map((ele)=>ele.id!==data.id?ele:data))
+            handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
+          })
+          .catch((response)=>alert(response.response.statusText))
+      }
       setNewName("")
       setNewNumber("")
     }
+    else{
+      // empty field
+      if(newName==="" || newNumber===""){
+        alert(`both fields of Add section should be filled`)
+      }
+
+      // no error(add this name/number)
+      else{
+        const obj = {name: newName.trim(), number: newNumber}
+        services
+        .createNew(obj)
+        .then(({data})=>{
+          // console.log(data);
+          setPersons(persons.concat(data))
+          handleMessage({...message, message:`Added ${obj.name}`, mode:'green'})
+          // console.log('added');
+        })
+        setNewName("")
+        setNewNumber("")
+      }
+    }
+    
+    
     
   }
   const typingName = (event) => {
@@ -89,7 +94,7 @@ const App = () => {
       // tried to delete a non-existing(already deleted) obj
       if(err!==undefined){
         setPersons(persons.filter(ele=> obj.id !== ele.id))
-        handleMessage({...message, message:`Information of ${obj.name} has already been removed from server`, mode:'red'})
+        handleMessage({...message, message:`Information of ${obj.name} does not exist on the database`, mode:'red'})
       }
 
       // did not approave the deletion though window.confirm
