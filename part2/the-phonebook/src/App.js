@@ -44,8 +44,14 @@ const App = () => {
           })
           .catch(err=>{
             // console.log(err);
-            setPersons(persons.filter(ele=> currentObj.id !== ele.id))
-            handleMessage({...message, message:`Information of ${currentObj.name} does not exist on the database`, mode:'red'})
+            // already deleted person tried to be modified
+            if(!err.response.data.errors.number.message){
+              setPersons(persons.filter(ele=> currentObj.id !== ele.id))
+              handleMessage({...message, message:`Information of ${currentObj.name} does not exist on the database`, mode:'red'})
+            
+            }
+            // invalid number 
+            handleMessage({...message, message:err.response.data.errors.number.message, mode:'red'})
             
           })
       }
@@ -71,7 +77,7 @@ const App = () => {
         })
         .catch(err => {
           // console.log(err);
-          handleMessage({...message, message:err.response.data.errors.name.message, mode:'red'})
+          handleMessage({...message, message:err.response.data.errors.number.message, mode:'red'})
         })
         setNewName("")
         setNewNumber("")
