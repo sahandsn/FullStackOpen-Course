@@ -25,7 +25,7 @@ const App = () => {
   // handlers
   const handleMessage = (newMessage) => {
     setMessage(newMessage)
-    setTimeout(()=>setMessage({...message, message:null}), 4000)
+    setTimeout(()=>setMessage({...message, message:null}), 5000)
   }
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -42,7 +42,12 @@ const App = () => {
             setPersons(persons.map((ele)=>ele.id!==data.id?ele:data))
             handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
           })
-          .catch((response)=>alert(response.response.statusText))
+          .catch(err=>{
+            // console.log(err);
+            setPersons(persons.filter(ele=> currentObj.id !== ele.id))
+            handleMessage({...message, message:`Information of ${currentObj.name} does not exist on the database`, mode:'red'})
+            
+          })
       }
       setNewName("")
       setNewNumber("")
@@ -63,6 +68,10 @@ const App = () => {
           setPersons(persons.concat(data))
           handleMessage({...message, message:`Added ${obj.name}`, mode:'green'})
           // console.log('added');
+        })
+        .catch(err => {
+          // console.log(err);
+          handleMessage({...message, message:err.response.data.errors.name.message, mode:'red'})
         })
         setNewName("")
         setNewNumber("")
