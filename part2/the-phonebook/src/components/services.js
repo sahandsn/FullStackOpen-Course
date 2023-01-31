@@ -1,7 +1,8 @@
 import axios from "axios"
 
-const baseurl = 'http://localhost:3001'
+const baseurl = 'https://phonebook-production.up.railway.app'
 // https://phonebook-production.up.railway.app
+// http://localhost:3001
 
 const getAll = () => {
     // console.log("promise pending ...");
