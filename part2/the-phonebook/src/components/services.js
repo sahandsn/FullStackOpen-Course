@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseurl = 'https://phonebook-production.up.railway.app'
+const baseurl = 'http://localhost:3001'
 // https://phonebook-production.up.railway.app
 // http://localhost:3001
 

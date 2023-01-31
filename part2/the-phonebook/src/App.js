@@ -43,18 +43,17 @@ const App = () => {
             handleMessage({...message, message:`Modified ${newName}`, mode:'green'})
           })
           .catch(err=>{
-            // console.log(err);
-            // already deleted person tried to be modified
-            if(!err.response.data.number){
-              setPersons(persons.filter(ele=> currentObj.id !== ele.id))
-              handleMessage({...message, message:`Information of ${currentObj.name} does not exist on the database`, mode:'red'})
-            
-            } else {
-              // invalid number 
+            console.log(err);
+            console.log(err.response.data.name);
+            if(err.response.data.name === "ValidationError"){
+              // present person tried to be modified with correct number
               handleMessage({...message, message:err.response.data.errors.number.message, mode:'red'})
             }
-            
-            
+            else{
+              // already deleted person tried to be modified
+              setPersons(persons.filter(ele=> currentObj.id !== ele.id))
+              handleMessage({...message, message:`Information of ${currentObj.name} does not exist on the database`, mode:'red'})
+            } 
           })
       }
       setNewName("")
