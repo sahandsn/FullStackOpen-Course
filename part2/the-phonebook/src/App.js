@@ -45,13 +45,15 @@ const App = () => {
           .catch(err=>{
             // console.log(err);
             // already deleted person tried to be modified
-            if(!err.response.data.errors.number.message){
+            if(!err.response.data.number){
               setPersons(persons.filter(ele=> currentObj.id !== ele.id))
               handleMessage({...message, message:`Information of ${currentObj.name} does not exist on the database`, mode:'red'})
             
+            } else {
+              // invalid number 
+              handleMessage({...message, message:err.response.data.errors.number.message, mode:'red'})
             }
-            // invalid number 
-            handleMessage({...message, message:err.response.data.errors.number.message, mode:'red'})
+            
             
           })
       }
