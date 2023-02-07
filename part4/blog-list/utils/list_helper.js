@@ -44,9 +44,29 @@ const mostBlogs = (blogsArr) => {
   }, { author: 'sahand', blogs: -1 });
 };
 
+const mostLikes = (blogsArr) => {
+  if (blogsArr.length === 0) {
+    return {};
+  }
+  const newObj = blogsArr.reduce((objs, currentObj) => {
+    if (!objs.hasOwnProperty(currentObj.author)) {
+      objs[currentObj.author] = 0;
+    }
+    objs[currentObj.author] += currentObj.likes;
+    return objs;
+  }, {});
+  return Object.keys(newObj).reduce((most, current) => {
+    if (most.likes < newObj[current]) {
+      return { author: current, likes: newObj[current] };
+    }
+    return most;
+  }, { author: 'sahand', likes: -1 });
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
