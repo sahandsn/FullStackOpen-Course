@@ -15,6 +15,9 @@ blogsRouter.post('/', async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
   // console.log(body);
+  if (!body.likes) {
+    body.likes = 0;
+  }
   const blog = new Blog(body);
   // console.log(blog);
   const savedBlog = await blog.save();

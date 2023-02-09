@@ -49,6 +49,19 @@ test('posting an acceptable blog to the db creates correct content and increases
   expect(body.at(-1).author).toContain('me');
 });
 
+test('blog to be posted with no likes property is saved with likes property set to zero', async () => {
+  const noLikesBlog = {
+    title: 'hi',
+    author: 'me',
+    url: 'great.com',
+  };
+  const response = await api
+    .post('/api/blogs')
+    .send(noLikesBlog);
+  expect(response.status).toBe(201);
+  expect(response.body.likes).toBe(0);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 }, 100000);
