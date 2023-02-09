@@ -13,13 +13,24 @@ beforeEach(async () => {
   await Promise.all(promiseArr);
 }, 100000);
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect('Content-Type', /application\/json/)
-    .expect(200);
+test('blog object has the key id instead of _id', async () => {
+  const response = await api.get('/api/blogs');
+  // console.log(JSON.stringify(blogArr));
+  // console.log(response.text);
+  expect(response.body[0].id).toBeDefined();
+});
+
+test('correct number of blogs are returned as json', async () => {
+  const response = await api.get('/api/blogs');
+  // console.log(response);
+  //   .expect(response.status).toBe(200)
+  expect(response.header['content-type']).toMatch(/application\/json/);
+  expect(response.body).toHaveLength(initialBlogs.length);
+  expect(response.status).toBe(200);
+  // console.log(response);
+  // expect(response.header.content-type'Content-Type', /application\/json/);
 });
 
 afterAll(async () => {
   await mongoose.connection.close();
-});
+}, 100000);
