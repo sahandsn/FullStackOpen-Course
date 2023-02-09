@@ -31,6 +31,24 @@ test('correct number of blogs are returned as json', async () => {
   // expect(response.header.content-type'Content-Type', /application\/json/);
 });
 
+test('posting an acceptable blog to the db creates correct content and increases the length', async () => {
+  const newBlog = {
+    title: 'hi',
+    author: 'me',
+    url: 'great.com',
+    likes: 1,
+  };
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const { body } = await api.get('/api/blogs');
+  expect(body).toHaveLength(initialBlogs.length + 1);
+  expect(body.at(-1).author).toContain('me');
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 }, 100000);
