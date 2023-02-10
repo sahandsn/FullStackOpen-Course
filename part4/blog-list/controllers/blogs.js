@@ -46,4 +46,25 @@ blogsRouter.delete('/:id', async (req, res) => {
   res.status(204).end();
 });
 
+blogsRouter.put('/:id', async (req, res) => {
+  const blogList = await Blog.find({});
+  const idArr = blogList.map((blog) => blog.id);
+  const { id } = req.params;
+  if (!idArr.includes(id)) {
+    res.status(404).json({ error: 'blog not found' });
+    return;
+  }
+  const newBlog = req.body;
+  if (Object.keys(newBlog).length === 0) {
+    res.status(400).json({ error: 'blog not changed' });
+    return;
+  }
+  if (!Object.keys(newBlog).every((key) => Object.keys(idArr[0]).includes(key))) {
+    res.status(400).json({ error: 'unspecified key' });
+    return;
+  }
+  const response = await Blog.findByIdAndUpdate(id, newBlog, { new: true });
+  res.json(response);
+});
+
 module.exports = blogsRouter;

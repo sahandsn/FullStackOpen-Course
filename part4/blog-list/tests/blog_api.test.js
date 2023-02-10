@@ -93,6 +93,59 @@ describe('deleting a blog', () => {
   });
 });
 
+describe('updating a blog', () => {
+  test('with a an invalid id', async () => {
+    const response = await api
+      .put('/api/blogs/1')
+      .send({
+        title: 'hi',
+        author: 'me',
+        url: 'great.com',
+        likes: 19,
+      });
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('blog not found');
+  });
+  test('with valid but non-existing id', async () => {
+    const id = nonExistingId();
+    const response = await api
+      .put(`/api/blogs/${id}`)
+      .send({
+        title: 'hi',
+        author: 'me',
+        url: 'great.com',
+        likes: 19,
+      });
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('blog not found');
+  });
+  test('with with a valid and existing id but unspecified key', async () => {
+    const blogArr = Blog.find({});
+    const response = await api
+      .put(`/api/blogs/${blogArr.at(-1).id}`)
+      .send({ liked: 19 });
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('unspecified key');
+  });
+  test('with with a valid and existing id but no changes', async () => {
+    const blogArr = Blog.find({});
+    const response = await api
+      .put(`/api/blogs/${blogArr.at(-1).id}`)
+      .send({});
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('blog not changed');
+  });
+  test('with correct inputs', async () => {
+    const blogArr = Blog.find({});
+    const blogAtEnd = blogArr.at(-1).id;
+    const response = await api
+      .put(`/api/blogs/${blogAtEnd.id}`)
+      .send({ ...blogAtEnd, likes: blogAtEnd.likes + 1 });
+    expect(response.status).toBe(200);
+    expect(response.body.likes).toBe(blogAtEnd.likes + 1);
+  });
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 }, 1000000);
