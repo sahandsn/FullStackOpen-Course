@@ -62,6 +62,18 @@ test('blog to be posted with no likes property is saved with likes property set 
   expect(response.body.likes).toBe(0);
 });
 
+test('blog with missing url or author returns status code 400', async () => {
+  const missingBlog = {
+    title: 'hi',
+    url: 'me.com',
+  };
+  const response = await api
+    .post('/api/blogs')
+    .send(missingBlog);
+  expect(response.status).toBe(400);
+  expect(response.body.error).toBe('misssing author or url');
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 }, 100000);

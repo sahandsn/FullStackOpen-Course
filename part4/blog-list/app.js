@@ -15,7 +15,7 @@ info(`connecting to ${config.MONGODB_URI}`);
 
 mongoose.connect(config.MONGODB_URI)
   .then(() => info('connected to mongodb'))
-  .catch((err) => `did not connect to mongodb: ${error(err.message)}`);
+  .catch((err) => error(`did not connect to mongodb: ${err.message}`));
 
 app.use(cors());
 app.use(express.static('build'));
