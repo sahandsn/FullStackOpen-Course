@@ -115,15 +115,17 @@ const initialBlogs = [
 ];
 
 const nonExistingId = async () => {
-  const blog = new Blog({ author: 'sahand' });
+  const blog = new Blog({
+    _id: '5a422a851b54a676234d17f7',
+    title: 'React patterns',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
+    likes: 7,
+    __v: 0,
+  });
   await blog.save();
   await blog.remove();
   return blog.id;
-};
-
-const blogsInDb = async () => {
-  const blogArr = await Blog.find({});
-  return blogArr;
 };
 
 module.exports = {
@@ -134,5 +136,4 @@ module.exports = {
   mostLikes,
   initialBlogs,
   nonExistingId,
-  blogsInDb,
 };
