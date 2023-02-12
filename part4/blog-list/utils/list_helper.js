@@ -116,12 +116,11 @@ const initialBlogs = [
 
 const nonExistingId = async () => {
   const blog = new Blog({
-    _id: '5a422a851b54a676234d17f7',
-    title: 'React patterns',
-    author: 'Michael Chan',
-    url: 'https://reactpatterns.com/',
+    title: 'hi',
+    author: 'Sahand',
+    url: 'me.com',
     likes: 7,
-    __v: 0,
+
   });
   await blog.save();
   await blog.remove();

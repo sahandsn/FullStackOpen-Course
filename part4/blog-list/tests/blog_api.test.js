@@ -13,27 +13,23 @@ beforeEach(async () => {
   await Promise.all(promiseArr);
 }, 1000000);
 
-describe('getting all of the blogs', () => {
-  test('blog object has the key id instead of _id', async () => {
+describe('get the blogs', () => {
+  test('and returned objects have id instead of _id', async () => {
     const response = await api.get('/api/blogs');
-    // console.log(JSON.stringify(blogArr));
-    // console.log(response.text);
     expect(response.body[0].id).toBeDefined();
   });
-  test('correct number of blogs are returned as json', async () => {
+  test('and the correct number of blogs are returned as json', async () => {
     const response = await api.get('/api/blogs');
-    // console.log(response);
     //   .expect(response.status).toBe(200)
     expect(response.header['content-type']).toMatch(/application\/json/);
     expect(response.body).toHaveLength(initialBlogs.length);
     expect(response.status).toBe(200);
-    // console.log(response);
     // expect(response.header.content-type'Content-Type', /application\/json/);
   });
 });
 
-describe('posting a blog', () => {
-  test('posting an acceptable blog to the db creates correct content and increases the length', async () => {
+describe('post a blog', () => {
+  test('which is correct creates correct content and increases the length', async () => {
     const newBlog = {
       title: 'hi',
       author: 'me',
@@ -49,7 +45,7 @@ describe('posting a blog', () => {
     expect(body).toHaveLength(initialBlogs.length + 1);
     expect(body.at(-1).author).toContain('me');
   });
-  test('blog to be posted with no likes property is saved with likes property set to zero', async () => {
+  test('with no likes property is saved with likes property set to zero', async () => {
     const noLikesBlog = {
       title: 'hi',
       author: 'me',
@@ -61,7 +57,7 @@ describe('posting a blog', () => {
     expect(response.status).toBe(201);
     expect(response.body.likes).toBe(0);
   });
-  test('blog with missing url or author returns status code 400', async () => {
+  test('with missing url or author returns status code 400', async () => {
     const missingBlog = {
       title: 'hi',
       url: 'me.com',
@@ -74,7 +70,7 @@ describe('posting a blog', () => {
   });
 });
 
-describe('deleting a blog', () => {
+describe('delete a blog', () => {
   test('with invalid id', async () => {
     const response = await api.delete('/api/blogs/1');
     expect(response.status).toBe(404);
@@ -93,7 +89,7 @@ describe('deleting a blog', () => {
   });
 });
 
-describe('updating a blog', () => {
+describe('update a blog', () => {
   test('with a an invalid id', async () => {
     const response = await api
       .put('/api/blogs/1')
