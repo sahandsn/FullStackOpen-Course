@@ -5,8 +5,6 @@ const unknownEndpont = (req, res) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-  // error(err);
-  // error(err.name);
   error(err.message);
   if (err.name === 'ValidationError') {
     res.status(400).json({ error: 'username must be unique and at leat three characters' });

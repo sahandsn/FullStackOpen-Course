@@ -13,6 +13,9 @@ usersRouter.post('/', async (req, res) => {
     res.status(400).json({ error: 'password must be at least three characters' });
     return;
   }
+  // if i checked for username length and uniqunes here as well,
+  // to avoid getting error message from middleware,
+  // then no need for its mongoose validator
   const saltRounds = 5;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const user = new User({

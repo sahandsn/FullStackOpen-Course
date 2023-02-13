@@ -47,7 +47,7 @@ blogsRouter.delete('/:id', async (req, res) => {
 });
 
 blogsRouter.put('/:id', async (req, res) => {
-  const blogList = await Blog.find({});
+  const blogList = await Blog.find({})
   const idArr = blogList.map((blog) => blog.id);
   const { id } = req.params;
   if (!idArr.includes(id)) {
@@ -59,7 +59,7 @@ blogsRouter.put('/:id', async (req, res) => {
     res.status(400).json({ error: 'blog not changed' });
     return;
   }
-  if (!Object.keys(newBlog).every((key) => Object.keys(idArr[0]).includes(key))) {
+  if (!Object.keys(newBlog).every((key) => Object.keys(blogList[0].toJSON()).includes(key))) {
     res.status(400).json({ error: 'unspecified key' });
     return;
   }

@@ -127,6 +127,27 @@ const nonExistingId = async () => {
   return blog.id;
 };
 
+const initialUsers = [
+  {
+    name: 'sahand',
+    username: 'sahandsn',
+    password: '1234',
+  },
+  {
+    name: 'samim',
+    username: 'samimsn',
+    password: '1234',
+  },
+];
+
+const delay = () => (
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 5000);
+  })
+);
+
 module.exports = {
   dummy,
   totalLikes,
@@ -135,4 +156,6 @@ module.exports = {
   mostLikes,
   initialBlogs,
   nonExistingId,
+  initialUsers,
+  delay,
 };
