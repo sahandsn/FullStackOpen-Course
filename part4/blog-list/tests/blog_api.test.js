@@ -43,7 +43,7 @@ describe('post a blog', () => {
       .expect('Content-Type', /application\/json/);
     const { body } = await api.get('/api/blogs');
     expect(body).toHaveLength(initialBlogs.length + 1);
-    expect(body.at(-1).author).toContain('me');
+    expect(body.at(-1).author).toBe('me');
   });
   test('with no likes property is saved with likes property set to zero', async () => {
     const noLikesBlog = {
@@ -77,13 +77,13 @@ describe('delete a blog', () => {
     expect(response.body.error).toBe('blog not found');
   });
   test('with valid but non-existing id', async () => {
-    const id = nonExistingId();
+    const id = await nonExistingId();
     const response = await api.delete(`/api/blogs/${id}`);
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('blog not found');
   });
   test('with a valid and existing id', async () => {
-    const blogArr = Blog.find({});
+    const blogArr = await Blog.find({});
     const response = await api.delete(`/api/blogs/${blogArr.at(-1).id}`);
     expect(response.status).toBe(204);
   });
@@ -103,7 +103,7 @@ describe('update a blog', () => {
     expect(response.body.error).toBe('blog not found');
   });
   test('with valid but non-existing id', async () => {
-    const id = nonExistingId();
+    const id = await nonExistingId();
     const response = await api
       .put(`/api/blogs/${id}`)
       .send({
@@ -116,7 +116,7 @@ describe('update a blog', () => {
     expect(response.body.error).toBe('blog not found');
   });
   test('with with a valid and existing id but unspecified key', async () => {
-    const blogArr = Blog.find({});
+    const blogArr = await Blog.find({});
     const response = await api
       .put(`/api/blogs/${blogArr.at(-1).id}`)
       .send({ liked: 19 });
@@ -124,7 +124,7 @@ describe('update a blog', () => {
     expect(response.body.error).toBe('unspecified key');
   });
   test('with with a valid and existing id but no changes', async () => {
-    const blogArr = Blog.find({});
+    const blogArr = await Blog.find({});
     const response = await api
       .put(`/api/blogs/${blogArr.at(-1).id}`)
       .send({});
@@ -132,13 +132,13 @@ describe('update a blog', () => {
     expect(response.body.error).toBe('blog not changed');
   });
   test('with correct inputs', async () => {
-    const blogArr = Blog.find({});
-    const blogAtEnd = blogArr.at(-1).id;
+    const blogArr = await Blog.find({});
+    const blogAtEnd = blogArr.at(-1);
     const response = await api
       .put(`/api/blogs/${blogAtEnd.id}`)
-      .send({ ...blogAtEnd, likes: blogAtEnd.likes + 1 });
-    expect(response.status).toBe(200);
+      .send({ likes: blogAtEnd.likes + 1 });
     expect(response.body.likes).toBe(blogAtEnd.likes + 1);
+    expect(response.status).toBe(200);
   });
 });
 
