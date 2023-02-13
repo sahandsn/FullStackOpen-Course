@@ -47,7 +47,7 @@ blogsRouter.delete('/:id', async (req, res) => {
 });
 
 blogsRouter.put('/:id', async (req, res) => {
-  const blogList = await Blog.find({})
+  const blogList = await Blog.find({});
   const idArr = blogList.map((blog) => blog.id);
   const { id } = req.params;
   if (!idArr.includes(id)) {
