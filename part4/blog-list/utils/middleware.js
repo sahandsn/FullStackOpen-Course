@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
     return;
   }
   if (err.name === 'JsonWebTokenError') {
-    res.status(400).json({ error: 'token invalid' });
+    res.status(401).json({ error: 'token invalid' });
     return;
   }
   if (err.name === 'Error') {
