@@ -2,8 +2,18 @@
 /* eslint-disable no-prototype-builtins */
 require('express-async-errors');
 const blogsRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
+const { SECRETE } = require('../utils/config');
+
+const getTokenFrom = (req) => {
+  const authorization = req.get('authorization');
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '');
+  }
+  return null;
+};
 
 blogsRouter.get('/', async (request, response) => {
   // console.log('geting all the blogs');
@@ -19,7 +29,12 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
-  const user = await User.findById(body.userId);
+  const decodedToken = jwt.verify(getTokenFrom(request), SECRETE);
+  if (!decodedToken.id) {
+    response.status(401).json({ error: 'token missing' });
+    return;
+  }
+  const user = await User.findById(decodedToken.id);
   // what if no user id was sent? errorHandling middleware
   if (!user) {
     response.status(400).json({ error: 'user not found' });
