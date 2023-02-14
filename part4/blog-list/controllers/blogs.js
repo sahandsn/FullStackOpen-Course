@@ -26,6 +26,10 @@ blogsRouter.post('/', async (request, response) => {
     response.status(401).json({ error: 'token missing' });
     return;
   }
+  if (decodedToken.id !== body.id) {
+    response.status(401).json({ error: 'unauthorized user' });
+    return;
+  }
   const user = await User.findById(decodedToken.id);
   // what if no user id was sent? errorHandling middleware
   if (!user) {
@@ -52,10 +56,18 @@ blogsRouter.post('/', async (request, response) => {
 });
 
 blogsRouter.delete('/:id', async (req, res) => {
-  const blogList = await Blog.find({});
-  const idArr = blogList.map((blog) => blog.id);
   const { id } = req.params;
-  if (!idArr.includes(id)) {
+  const blog = await Blog.findById({ _id: id });
+  const decodedToken = jwt.verify(req.token, SECRETE);
+  if (!decodedToken.id) {
+    res.status(401).json({ error: 'token missing' });
+    return;
+  }
+  if (decodedToken.id.toString() !== blog.user.toString()) {
+    res.status(401).json({ error: 'unauthorized user' });
+    return;
+  }
+  if (!blog) {
     res.status(404).json({ error: 'blog not found' });
     return;
   }
