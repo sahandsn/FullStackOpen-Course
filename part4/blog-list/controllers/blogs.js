@@ -7,14 +7,6 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 const { SECRETE } = require('../utils/config');
 
-const getTokenFrom = (req) => {
-  const authorization = req.get('authorization');
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '');
-  }
-  return null;
-};
-
 blogsRouter.get('/', async (request, response) => {
   // console.log('geting all the blogs');
   const blogArr = await Blog
@@ -29,7 +21,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
-  const decodedToken = jwt.verify(getTokenFrom(request), SECRETE);
+  const decodedToken = jwt.verify(request.token, SECRETE);
   if (!decodedToken.id) {
     response.status(401).json({ error: 'token missing' });
     return;
