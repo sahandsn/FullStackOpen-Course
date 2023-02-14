@@ -6,7 +6,6 @@ const blogsRouter = require('express').Router();
 const middleware = require('../utils/middleware');
 const Blog = require('../models/blog');
 const User = require('../models/user');
-const { SECRETE } = require('../utils/config');
 
 blogsRouter.get('/', async (request, response) => {
   // console.log('geting all the blogs');
@@ -22,16 +21,11 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
-  const decodedToken = jwt.verify(request.token, SECRETE);
-  if (!decodedToken.id) {
+  if (!request.user.id) {
     response.status(401).json({ error: 'token missing' });
     return;
   }
-  if (decodedToken.id !== body.id) {
-    response.status(401).json({ error: 'unauthorized user' });
-    return;
-  }
-  const user = await User.findById(decodedToken.id);
+  const user = await User.findById(request.user.id);
   // what if no user id was sent? errorHandling middleware
   if (!user) {
     response.status(400).json({ error: 'user not found' });
