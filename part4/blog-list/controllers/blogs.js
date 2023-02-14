@@ -21,15 +21,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
-  if (!request.user.id) {
-    response.status(401).json({ error: 'token missing' });
-    return;
-  }
-  const user = await User.findById(request.user.id);
-  // what if no user id was sent? errorHandling middleware
-  if (!user) {
-    response.status(400).json({ error: 'user not found' });
-  }
+  // console.log(body);
   if (body.likes === undefined) {
     body.likes = 0;
   }
@@ -41,9 +33,6 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   blog.user = user;
   // console.log(blog);
   const savedBlog = await blog.save();
-  user.blogs = user.blogs.concat(savedBlog.id);
-  await user.save();
-  // saved blog includes the user's blogs field as well
   response.status(201).json(savedBlog);
   // blog
   //   .save()
