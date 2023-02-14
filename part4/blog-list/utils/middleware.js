@@ -10,6 +10,10 @@ const errorHandler = (err, req, res, next) => {
     res.status(400).json({ error: 'username must be unique and at leat three characters' });
     return;
   }
+  if (err.name === 'JsonWebTokenError') {
+    res.status(400).json({ error: 'token invalid' });
+    return;
+  }
   if (err.name === 'Error') {
     res.status(400).json({ error: 'malformated password - must be a string' });
     return;
