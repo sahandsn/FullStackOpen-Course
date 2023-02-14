@@ -1,11 +1,15 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 require('express-async-errors');
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 blogsRouter.get('/', async (request, response) => {
   // console.log('geting all the blogs');
-  const blogArr = await Blog.find({});
+  const blogArr = await Blog
+    .find({})
+    .populate('user', 'username name');
   response.json(blogArr);
   // Blog
   //   .find({})
@@ -15,7 +19,11 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
-  // console.log(body);
+  const user = await User.findById(body.userId);
+  // what if no user id was sent? errorHandling middleware
+  if (!user) {
+    response.status(400).json({ error: 'user not found' });
+  }
   if (body.likes === undefined) {
     body.likes = 0;
   }
@@ -24,8 +32,11 @@ blogsRouter.post('/', async (request, response) => {
     return;
   }
   const blog = new Blog(body);
+  blog.user = user;
   // console.log(blog);
   const savedBlog = await blog.save();
+  user.blogs = user.blogs.concat(savedBlog.id);
+  await user.save();
   response.status(201).json(savedBlog);
   // blog
   //   .save()
