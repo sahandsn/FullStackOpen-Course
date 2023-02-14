@@ -1,10 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-prototype-builtins */
 require('express-async-errors');
+const jwt = require('jsonwebtoken');
 const blogsRouter = require('express').Router();
 const middleware = require('../utils/middleware');
 const Blog = require('../models/blog');
-// const User = require('../models/user');
+const User = require('../models/user');
+const { SECRETE } = require('../utils/config');
 
 blogsRouter.get('/', async (request, response) => {
   // console.log('geting all the blogs');
@@ -20,7 +22,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   // console.log('posting a blog');
   const { body } = request;
-  const decodedToken = jwt.verify(getTokenFrom(request), SECRETE);
+  const decodedToken = jwt.verify(request.token, SECRETE);
   if (!decodedToken.id) {
     response.status(401).json({ error: 'token missing' });
     return;
