@@ -37,6 +37,7 @@ blogsRouter.post('/', async (request, response) => {
   const savedBlog = await blog.save();
   user.blogs = user.blogs.concat(savedBlog.id);
   await user.save();
+  // saved blog includes the user's blogs field as well
   response.status(201).json(savedBlog);
   // blog
   //   .save()
