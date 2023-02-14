@@ -27,6 +27,10 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
     response.status(401).json({ error: 'token missing' });
     return;
   }
+  if (decodedToken.id !== body.id) {
+    response.status(401).json({ error: 'unauthorized user' });
+    return;
+  }
   const user = await User.findById(decodedToken.id);
   // what if no user id was sent? errorHandling middleware
   if (!user) {
