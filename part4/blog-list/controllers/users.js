@@ -19,7 +19,7 @@ usersRouter.post('/', async (req, res) => {
   const saltRounds = 5;
   const passwordHash = await bcrypt.hash(password, saltRounds);
   const user = new User({
-    username, name, passwordHash,
+    username, name, passwordHash, blogs: [],
   });
   // if username is short or not unique, we will get a ValidationError
   const savedUser = await user.save();
@@ -27,7 +27,9 @@ usersRouter.post('/', async (req, res) => {
 });
 
 usersRouter.get('/', async (req, res) => {
-  const usersArr = await User.find({});
+  const usersArr = await User
+    .find({})
+    .populate('blogs', 'url title author id');
   res.json(usersArr);
 });
 
