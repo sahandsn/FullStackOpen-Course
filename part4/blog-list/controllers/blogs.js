@@ -19,8 +19,17 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   // console.log('posting a blog');
-  const { body, user } = request;
-  // console.log(body);
+  const { body } = request;
+  const decodedToken = jwt.verify(getTokenFrom(request), SECRETE);
+  if (!decodedToken.id) {
+    response.status(401).json({ error: 'token missing' });
+    return;
+  }
+  const user = await User.findById(decodedToken.id);
+  // what if no user id was sent? errorHandling middleware
+  if (!user) {
+    response.status(400).json({ error: 'user not found' });
+  }
   if (body.likes === undefined) {
     body.likes = 0;
   }
