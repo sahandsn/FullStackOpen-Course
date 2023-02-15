@@ -17,6 +17,10 @@ const errorHandler = (err, req, res, next) => {
     res.status(401).json({ error: 'token invalid' });
     return;
   }
+  if (err.name === 'CastError') {
+    res.status(404).json({ error: 'invalid id' });
+    return;
+  }
   if (err.name === 'Error') {
     res.status(400).json({ error: 'malformated password - must be a string' });
     return;

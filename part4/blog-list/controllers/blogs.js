@@ -51,17 +51,17 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (req, res) => {
   const { id } = req.params;
-  const blog = await Blog.findById({ _id: id });
   if (!req.user.id) {
     res.status(401).json({ error: 'token missing' });
     return;
   }
-  if (req.user.id.toString() !== blog.user.toString()) {
-    res.status(401).json({ error: 'unauthorized user' });
-    return;
-  }
+  const blog = await Blog.findById(id);
   if (!blog) {
     res.status(404).json({ error: 'blog not found' });
+    return;
+  }
+  if (req.user.id.toString() !== blog.user.toString()) {
+    res.status(401).json({ error: 'unauthorized user' });
     return;
   }
   // const deletedBlog = await Blog.findByIdAndRemove(id);

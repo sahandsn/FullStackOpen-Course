@@ -65,7 +65,7 @@ describe('post a users', () => {
     const newUser = {
       name: 'hi',
       password: '1234',
-      username: 'sahandsn',
+      username: 'root',
     };
     const res = await api
       .post('/api/users')
