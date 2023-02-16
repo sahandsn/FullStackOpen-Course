@@ -1,6 +1,6 @@
 # summary
 
-this part focused on three aspects of the backend: project structure, testing, and user administration.
+This part focused on three aspects of the backend: project structure, testing, and user administration.
 
 ## project structure
 
