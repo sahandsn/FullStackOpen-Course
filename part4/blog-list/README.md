@@ -22,6 +22,8 @@ tests should not be dependent on the state of the db. two jest middlewares were 
 
 asynchronous code can be written using the synchronous style with **async/await**. use either async/await or then method for the same code, not both. await have to return a promise. error handling is done with **try/catch**. if the catch only calls next(exception), we can get ride of the try/catch syntax by adding the **express-async-error** library.  note that forEach function of JS is not optimized for working with promises. instead use **Promise.all**, if speed is needed since it runs the promises in parallel, or **for/of block**, if the order of execution of promises must be kept since it runs tests serially.
 
+*painful mistake:* make sure that the error you are getting happens on other devices as well, might be hardware related not software.
+
 ## user administration
 
 relational db use foreign key to reference resourses on seperate tables. document db **did not** support join queries for agregating data from multiple tabs until mongoDB introduced $lookup, which works by making multiple queries. unlike relational db, references are stored in **both** documents schemas with model names in document db.
