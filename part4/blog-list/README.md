@@ -4,7 +4,7 @@ This part focused on three aspects of the backend: project structure, testing, a
 
 ## project structure
 
-following DRY and increasing readablity of the code, the backend file was **refactored** to decrease the complexity of individual files and apply single responsibility principle. as the application grows, following thses principals will make the development and debugging much more convinient.
+following DRY and increasing readablity of the code, the backend file was **refactored** to decrease the complexity of individual files and apply single responsibility principle. As the application grows, following thses principals will make the development and debugging much more convinient.
 
 refactoring the API route handler was possible with **router object** of the express. one advantage of refacoring port litener and route handler was testing at the API level without making calls via HTTP over the network. the order of middleware call was important. 
 
