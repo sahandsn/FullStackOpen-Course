@@ -2,7 +2,7 @@ import loginService from '../services/login'
 import blogsService from '../services/blogs'
 import { useState } from 'react'
 
-const LoginForm = ({setUser}) => {
+const LoginForm = ({setUser, handleMessage}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
   
@@ -15,7 +15,9 @@ const LoginForm = ({setUser}) => {
         window.localStorage.setItem('loggedUser', JSON.stringify(user))
         setUsername('')
         setPassword('')
+        handleMessage({message:`welcome ${user.name}`, mode:'green'})
       } catch(exeption) {
+        handleMessage({message:'invalid username/password', mode:'red'})
         console.warn(exeption)
       }
     }
