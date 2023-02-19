@@ -32,7 +32,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   if (body.likes === undefined) {
     body.likes = 0;
   }
-  if (body.author === undefined || body.url === undefined) {
+  if (!body.author || !body.url) {
     response.status(400).json({ error: 'misssing author or url' });
     return;
   }
