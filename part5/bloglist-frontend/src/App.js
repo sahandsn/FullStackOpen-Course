@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import Notification from './components/Notification/Notification'
 import blogService from './services/blogs'
 
@@ -9,6 +10,21 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState({message:null, mode:'green'})
+
+  const blogFormRef = useRef()
+
+  const addBlog = async (newBlog) => {   
+    try{
+      const savedBlog = await blogService.createOne(newBlog)
+      setBlogs(blogs.concat(savedBlog))
+      blogFormRef.current.toggleVisibility()
+      handleMessage({message:`a new blog "${savedBlog.title}" by ${savedBlog.author} added`, mode:'green'})
+      
+  } catch(exeption) {
+      handleMessage({message:'invalid entry', mode:'red'})
+      console.warn(exeption)
+  }
+  }
 
   useEffect(() => {
     blogService
@@ -54,7 +70,9 @@ const App = () => {
       </div>
       <div>
         <h2>create new</h2>
-        <BlogForm setBlogs={setBlogs} blogs={blogs} handleMessage={handleMessage}/>
+        <Togglable buttonLabel='New Blog' ref={blogFormRef}>
+          <BlogForm setBlogs={setBlogs} blogs={blogs} handleMessage={handleMessage} addBlog={addBlog}/>
+        </Togglable>
         {user !== null && <>{blogs.map(blog => <Blog key={blog.id} blog={blog} />)}</>}
       </div>
     </>
