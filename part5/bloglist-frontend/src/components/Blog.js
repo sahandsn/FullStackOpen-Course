@@ -19,10 +19,10 @@ const Blog = ({blog}) => {
   if(brief===false) {
     return (
       <div style={blogStyle}>
-        <i>{blog.title} <button onClick={reveal}>Hide</button></i>
-        <a href={blog.link} target='_blank' rel='noreferrer'>{blog.link}</a>
+        <p><i>{blog.title}</i> {blog.author} <button onClick={reveal}>Hide</button></p>
+        <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
         <p>Likes: {blog.likes} <button>Like</button></p>
-        <p>{blog.author}</p>
+        <p>{blog.user.name}</p>
       </div>
     )
   }
