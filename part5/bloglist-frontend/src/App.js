@@ -11,6 +11,14 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState({message:null, mode:'green'})
 
+  const section = {
+    border: 'solid',
+    borderWidth: 1,
+    margin: '5px',
+    padding: '5px',
+  }
+
+
   const blogFormRef = useRef()
 
   const addBlog = async (newBlog) => {   
@@ -63,18 +71,23 @@ const App = () => {
   return (
     <>
       <Notification message={message} />
-      <div>
-        <h2>blogs</h2>
+      <div style={section}>
+        <h2>Blogs</h2>
         {user.name} is logged in
         <button onClick={handleLogout}>Logout</button>
       </div>
-      <div>
-        <h2>create new</h2>
+      <div style={section}>
+        <h2>Create New</h2>
         <Togglable buttonLabel='New Blog' ref={blogFormRef}>
           <BlogForm setBlogs={setBlogs} blogs={blogs} handleMessage={handleMessage} addBlog={addBlog}/>
         </Togglable>
-        {user !== null && <>{blogs.map(blog => <Blog key={blog.id} blog={blog} />)}</>}
       </div>
+      
+      <div>
+        {user !== null && <>{blogs.map(blog => <Blog key={blog.id} blog={blog} />)}</>}
+      </div> 
+        
+      
     </>
   )
 }
