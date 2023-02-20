@@ -37,6 +37,7 @@ const App = () => {
   useEffect(() => {
     blogService
       .getAll()
+      .then(blogs => blogs.sort((a, b) => b.likes - a.likes))
       .then(blogs => setBlogs(blogs)) 
   }, [])
   useEffect(() => {
@@ -58,8 +59,18 @@ const App = () => {
     setTimeout(()=>setMessage({message:null}), 4000)
   }
   const handleLike = async (newBlog) => {
-    const updatedBlog = await blogService.updateOne(newBlog)
-    setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
+    try{
+      const updatedBlog = await blogService.updateOne(newBlog)
+      setBlogs(blogs
+        .map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog)
+        .sort((a, b) => b.likes - a.likes)
+      )
+      handleMessage({message: 'blog updated', mode: 'green'})
+    } catch(exeption) {
+      console.log(exeption);
+      handleMessage({message: 'blog was not updated', mode: 'red'})
+    }
+    
   }
 
   if (user === null) {
