@@ -18,7 +18,6 @@ const App = () => {
     padding: '5px',
   }
 
-
   const blogFormRef = useRef()
 
   const addBlog = async (newBlog) => {   
@@ -72,6 +71,19 @@ const App = () => {
     }
     
   }
+  const handleDelete = async (deletedBlog) => {
+    try{
+      await blogService.deleteOne(deletedBlog.id)
+      handleMessage({message: 'deleted blog', mode: 'green'})
+      setBlogs(blogs
+        .filter(blog => blog.id !== deletedBlog.id)
+        .sort((a, b) => b.likes - a.likes)
+      )
+    } catch(exeption) {
+      console.log(exeption);
+      handleMessage({message: 'blog was not deleted', mode: 'red'})
+    }
+  }
 
   if (user === null) {
     return (
@@ -99,7 +111,9 @@ const App = () => {
       </div>
       
       <div>
-        {user !== null && <>{blogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} />)}</>}
+        {user !== null && <>
+          {blogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} user={user}/>)}
+        </>}
       </div> 
         
       
