@@ -1,6 +1,7 @@
-import {useState} from 'react'
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({blog ,handleLike, handleDelete, user}) => {
+const Blog = ({ blog ,handleLike, handleDelete, user }) => {
   const [brief, setBrief] = useState(true)
 
   const blogStyle = {
@@ -12,18 +13,15 @@ const Blog = ({blog ,handleLike, handleDelete, user}) => {
     marginTop: 5
   }
 
-  const reveal = (e) => {
+  const reveal = () => {
     setBrief(!brief)
   }
 
   const handleLikeIncrease = () => {
     const newBlog = {
-      url: blog.url, 
-      author: blog.author, 
-      likes: blog.likes + 1, 
-      title: blog.title, 
+      ...blog,
       user: blog.user.id,
-      id: blog.id,
+      likes: blog.likes + 1
     }
     handleLike(newBlog)
   }
@@ -47,7 +45,14 @@ const Blog = ({blog ,handleLike, handleDelete, user}) => {
 
   return (<div style={blogStyle}>
     {blog.title} {blog.author} <button onClick={reveal}>View</button>
-  </div> ) 
+  </div> )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 export default Blog

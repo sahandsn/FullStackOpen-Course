@@ -9,7 +9,7 @@ import blogService from './services/blogs'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState({message:null, mode:'green'})
+  const [message, setMessage] = useState({ message: null, mode: 'green' })
 
   const section = {
     border: 'solid',
@@ -20,31 +20,31 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const addBlog = async (newBlog) => {   
-    try{
+  const addBlog = async (newBlog) => {
+    try {
       const savedBlog = await blogService.createOne(newBlog)
       setBlogs(blogs.concat(savedBlog))
       blogFormRef.current.toggleVisibility()
-      handleMessage({message:`a new blog "${savedBlog.title}" by ${savedBlog.author} added`, mode:'green'})
-      
-  } catch(exeption) {
-      handleMessage({message:'invalid entry', mode:'red'})
+      handleMessage({ message: `a new blog "${savedBlog.title}" by ${savedBlog.author} added`, mode: 'green' })
+
+    } catch (exeption) {
+      handleMessage({ message: 'invalid entry', mode: 'red' })
       console.warn(exeption)
-  }
+    }
   }
 
   useEffect(() => {
     blogService
       .getAll()
       .then(blogs => blogs.sort((a, b) => b.likes - a.likes))
-      .then(blogs => setBlogs(blogs)) 
+      .then(blogs => setBlogs(blogs))
   }, [])
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedUser')
     if (loggedUserJson) {
       const user = JSON.parse(loggedUserJson)
       setUser(user)
-      handleMessage({message:`welcome back ${user.name}`, mode:'green'})
+      handleMessage({ message: `welcome back ${user.name}`, mode: 'green' })
       blogService.setToken(user.token)
     }
   }, [])
@@ -55,33 +55,33 @@ const App = () => {
   }
   const handleMessage = (newMessage) => {
     setMessage(newMessage)
-    setTimeout(()=>setMessage({message:null}), 4000)
+    setTimeout(() => setMessage({ message: null }), 4000)
   }
   const handleLike = async (newBlog) => {
-    try{
+    try {
       const updatedBlog = await blogService.updateOne(newBlog)
       setBlogs(blogs
-        .map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog)
+        .map(blog => blog.id !== updatedBlog.id ? blog : { ...blog, likes: blog.likes + 1 })
         .sort((a, b) => b.likes - a.likes)
       )
-      handleMessage({message: 'blog updated', mode: 'green'})
-    } catch(exeption) {
-      console.log(exeption);
-      handleMessage({message: 'blog was not updated', mode: 'red'})
+      handleMessage({ message:`blog ${updatedBlog.title} updated`, mode:'green' })
+    } catch (exeption) {
+      console.log(exeption)
+      handleMessage({ message: 'blog was not updated', mode: 'red' })
     }
-    
+
   }
   const handleDelete = async (deletedBlog) => {
-    try{
+    try {
       await blogService.deleteOne(deletedBlog.id)
-      handleMessage({message: 'deleted blog', mode: 'green'})
+      handleMessage({ message: 'deleted blog', mode: 'green' })
       setBlogs(blogs
         .filter(blog => blog.id !== deletedBlog.id)
         .sort((a, b) => b.likes - a.likes)
       )
-    } catch(exeption) {
-      console.log(exeption);
-      handleMessage({message: 'blog was not deleted', mode: 'red'})
+    } catch (exeption) {
+      console.log(exeption)
+      handleMessage({ message: 'blog was not deleted', mode: 'red' })
     }
   }
 
@@ -90,7 +90,7 @@ const App = () => {
       <div>
         <Notification message={message} />
         <h2>Login to Application</h2>
-        <LoginForm setUser={setUser} handleMessage={handleMessage}/>
+        <LoginForm setUser={setUser} handleMessage={handleMessage} />
       </div>
     )
   }
@@ -106,17 +106,17 @@ const App = () => {
       <div style={section}>
         <h2>Create New</h2>
         <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-          <BlogForm setBlogs={setBlogs} blogs={blogs} handleMessage={handleMessage} addBlog={addBlog}/>
+          <BlogForm setBlogs={setBlogs} blogs={blogs} handleMessage={handleMessage} addBlog={addBlog} />
         </Togglable>
       </div>
-      
+
       <div>
         {user !== null && <>
-          {blogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} user={user}/>)}
+          {blogs.map(blog => <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} user={user} />)}
         </>}
-      </div> 
-        
-      
+      </div>
+
+
     </>
   )
 }
