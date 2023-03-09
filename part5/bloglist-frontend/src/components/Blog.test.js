@@ -4,18 +4,6 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
 
-// test('blog only displays title and author by default', () => {
-//   const blog = {
-//     title: 'a blog',
-//     author: ' an author',
-//     url: 'a url',
-//   }
-
-//   const mockHandleLike = jest.fn()
-//   const mockHandleDelete = jest.fn()
-
-// })
-
 describe('Blog component tests', () => {
   const user = {
     name: 'sahand',

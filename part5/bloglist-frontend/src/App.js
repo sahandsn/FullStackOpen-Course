@@ -106,7 +106,7 @@ const App = () => {
       <div style={section}>
         <h2>Create New</h2>
         <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-          <BlogForm setBlogs={setBlogs} blogs={blogs} handleMessage={handleMessage} addBlog={addBlog} />
+          <BlogForm addBlog={addBlog} />
         </Togglable>
       </div>
 
