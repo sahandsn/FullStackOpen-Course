@@ -29,15 +29,15 @@ describe('Blog component tests', () => {
     user: user,
   }
 
-  const mockUpdateBlog = jest.fn()
-  const mockDeleteBlog = jest.fn()
+  const mockLikeHandler = jest.fn()
+  const mockDeleteHandler = jest.fn()
 
   test('only renders title and author by default', () => {
     const { container } = render(
       <Blog
         blog={blog}
-        handleLike={mockUpdateBlog}
-        handleDelete={mockDeleteBlog}
+        handleLike={mockLikeHandler}
+        handleDelete={mockDeleteHandler}
         user={user}
       />
     )
@@ -49,8 +49,8 @@ describe('Blog component tests', () => {
     const { container } = render(
       <Blog
         blog={blog}
-        handleLike={mockUpdateBlog}
-        handleDelete={mockDeleteBlog}
+        handleLike={mockLikeHandler}
+        handleDelete={mockDeleteHandler}
         user={user}
       />
     )
@@ -60,5 +60,23 @@ describe('Blog component tests', () => {
     expect(container).toHaveTextContent('a title by an author')
     expect(container).toHaveTextContent('a url')
     expect(container).toHaveTextContent('Likes: 1')
+  })
+  // eslint-disable-next-line quotes
+  test("like's event handler is called properly", async () => {
+    render(
+      <Blog
+        blog={blog}
+        handleLike={mockLikeHandler}
+        handleDelete={mockDeleteHandler}
+        user={user}
+      />
+    )
+    const mockUser = userEvent.setup()
+    const revealButton = screen.getByText('View')
+    await mockUser.click(revealButton)
+    const likeButton = screen.getByText('Like')
+    await mockUser.click(likeButton)
+    await mockUser.click(likeButton)
+    expect(mockLikeHandler.mock.calls).toHaveLength(2)
   })
 })
