@@ -1,0 +1,45 @@
+GET http://localhost:3003/api/blogs/
+###
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGFuZHNuIiwiaWQiOiI2M2VjMTI3ZDZkNzEyZTUyNDg3ZmI0YTUiLCJpYXQiOjE2NzY0MTU2MzN9.4oHgsJKXeH9BHaGyDx-NINzm3vKVFZJjA7_yMEQ07LE
+
+{
+  "title":"foo",
+  "author":"me",
+  "url":"great.com",
+  "likes":3
+}
+###
+GET http://localhost:3003/guz
+###
+DELETE http://localhost:3003/api/blogs/63ec12a46d712e52487fb4ac
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhaGFuZHNuIiwiaWQiOiI2M2VjMTI3ZDZkNzEyZTUyNDg3ZmI0YTUiLCJpYXQiOjE2NzY0MTU2MzN9.4oHgsJKXeH9BHaGyDx-NINzm3vKVFZJjA7_yMEQ07LE
+
+
+###
+PUT http://localhost:3003/api/blogs/63e637f156d6de6784b1571d
+Content-Type: application/json
+
+{
+  "liked" : 8
+}
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "sahand",
+  "username": "sahandsn",
+  "password": "1234"
+}
+###
+GET http://localhost:3003/api/users
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "sahandsn",
+  "password": "1234"
+}
