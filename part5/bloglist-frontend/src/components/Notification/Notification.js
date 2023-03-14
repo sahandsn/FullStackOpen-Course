@@ -7,18 +7,18 @@ const Notification = ({ message: { message, mode } }) => {
   }
   if (mode === 'green') {
     return (
-      <div className={styles.green}>{message}</div>
+      <div className={`${styles.green} success`}>{message}</div>
     )
   }
   else if (mode === 'red') {
     return (
-      <div className={styles.red}>{message}</div>
+      <div className={`${styles.red} error` }>{message}</div>
     )
   }
   // user modified the input
   else {
     return (
-      <div className={styles.gray}>{message}</div>
+      <div className={`${styles.gray} unnatural`}>{message}</div>
     )
   }
 
