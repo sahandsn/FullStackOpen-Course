@@ -8,6 +8,7 @@ const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const middleware = require('./utils/middleware');
 const { info, error } = require('./utils/logger');
+const testRouter = require('./controllers/test');
 
 const app = express();
 
@@ -30,6 +31,10 @@ app.use(morgan(':method :url :status :res[content-length] -> :response-time ms <
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/test', testRouter);
+}
 
 app.use(middleware.unknownEndpont);
 app.use(middleware.errorHandler);
