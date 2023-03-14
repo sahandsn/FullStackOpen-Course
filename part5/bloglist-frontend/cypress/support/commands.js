@@ -29,3 +29,11 @@ Cypress.Commands.add('login', ({ username, password }) => {
   cy.contains('password').find('input').type(password)
   cy.get('button').click()
 })
+
+Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+  cy.contains('New Blog').click()
+  cy.contains('title').find('input').type(title)
+  cy.contains('author').find('input').type(author)
+  cy.contains('url').find('input').type(url)
+  cy.get('form').contains('Create').click()
+})

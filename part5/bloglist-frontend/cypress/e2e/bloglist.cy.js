@@ -33,17 +33,13 @@ describe('Blog app', function () {
         .and('have.css', 'background-color', 'rgb(240, 128, 128)')
     })
   })
-  describe('When logged in', function() {
+  describe('When logged in, a blog can be', function() {
     beforeEach(function() {
       cy.login({ username: 'sahandsn', password:'1234' })
     })
 
-    it('A blog can be created', function() {
-      cy.contains('New Blog').click()
-      cy.contains('title').find('input').type('title')
-      cy.contains('author').find('input').type('author')
-      cy.contains('url').find('input').type('https://fullstackopen.com/')
-      cy.get('form').contains('Create').click()
+    it('created', function() {
+      cy.createBlog({ title: 'title', author: 'author', url: 'https://fullstackopen.com/' })
       cy.get('html').contains('title author').find('button').click()
       cy.get('html')
         .should('contain', 'title by author')
@@ -53,6 +49,13 @@ describe('Blog app', function () {
         .and('contain', 'Like')
         .and('contain', 'sahandsn')
         .and('contain', 'Remove')
+    })
+    it('liked', function() {
+      cy.createBlog({ title: 'title', author: 'author', url: 'https://fullstackopen.com/' })
+      cy.contains('title author').find('button').click()
+      cy.get('html').should('contain', 'Likes: 0')
+      cy.contains('Likes: 0').find('button').click()
+      cy.get('html').should('contain', 'Likes: 1')
     })
   })
 })
