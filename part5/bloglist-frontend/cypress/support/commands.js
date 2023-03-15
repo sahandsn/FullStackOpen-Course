@@ -25,15 +25,21 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('login', ({ username, password }) => {
-  cy.contains('username').find('input').type(username)
-  cy.contains('password').find('input').type(password)
-  cy.get('button').click()
+  cy.request('POST', 'http://localhost:3001/api/login', { username: username, password:password })
+    .then(res => {
+      localStorage.setItem('loggedUser', JSON.stringify(res.body))
+      cy.visit('http://localhost:3000')
+    })
 })
 
 Cypress.Commands.add('createBlog', ({ title, author, url }) => {
-  cy.contains('New Blog').click()
-  cy.contains('title').find('input').type(title)
-  cy.contains('author').find('input').type(author)
-  cy.contains('url').find('input').type(url)
-  cy.get('form').contains('Create').click()
+  cy.request({
+    url: 'http://localhost:3001/api/blogs',
+    method: 'POST',
+    body: { title, author, url },
+    headers: {
+      'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loggedUser')).token}`
+    }
+  })
+  cy.visit('http://localhost:3000')
 })
