@@ -33,7 +33,7 @@ const Blog = ({ blog ,handleLike, handleDelete, user }) => {
 
   if(brief===false) {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blog'>
         <p><i>{blog.title}</i> by {blog.author} <button onClick={reveal}>Hide</button></p>
         <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
         <p>Likes: {blog.likes} <button onClick={handleLikeIncrease}>Like</button></p>
@@ -43,7 +43,7 @@ const Blog = ({ blog ,handleLike, handleDelete, user }) => {
     )
   }
 
-  return (<div style={blogStyle}>
+  return (<div style={blogStyle} className='blog'>
     {blog.title} {blog.author} <button onClick={reveal}>View</button>
   </div> )
 }
