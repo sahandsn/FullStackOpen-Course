@@ -48,6 +48,7 @@ export const vote = (id) => {
   }
 }
 
+// action creator for new anecdote creation
 export const newAnecdote = (content) => {
   return{
     type: 'NEW_ANECDOTE', 
