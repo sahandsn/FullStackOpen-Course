@@ -14,10 +14,11 @@ const AnecdoteList = () => {
         }
         // return [...anecdotes, filter.anecdotes].sort((a1, a2) => a2.votes - a1.votes)
     })
-
-    const voteHandler = (id) => {
-        dispatch(vote(id)) 
-    }
+    // console.log(anecdotes)
+    // const voteHandler = (id) => {
+    //     dispatch(vote(id)) 
+    //     // voteHandler(anecdote.id)
+    // }
 
     return(
         <div>
@@ -28,13 +29,12 @@ const AnecdoteList = () => {
                 </div>
                 <div>
                     has {anecdote.votes}
-                    <button onClick={() => voteHandler(anecdote.id)}>vote</button>
+                    <button onClick={() => dispatch(vote({id:anecdote.id}))}>vote</button>
                 </div>
                 </div>
             )}
         </div>
-    )
-    
+    ) 
 }
 
 export default AnecdoteList

@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { filter } from '../reducers/filterReducer'
+import { setFilter } from '../reducers/filterReducer'
 
 const Filter = () => {
     const dispatch = useDispatch()
@@ -7,9 +7,9 @@ const Filter = () => {
     const handleChange = (event) => {
       const input = event.target.value;
       if(input.length === 0){
-        dispatch(filter('ALL'))
+        dispatch(setFilter('ALL'))
       } else {
-        dispatch(filter(input))
+        dispatch(setFilter(input))
       }
     }
     const style = {
@@ -18,7 +18,7 @@ const Filter = () => {
   
     return (
       <div style={style}>
-        <label for='filter-search'>filter</label> 
+        <label htmlFor='filter-search'>filter</label> 
         <input onChange={handleChange} id='filter-search' type='text'/>
       </div>
     )
