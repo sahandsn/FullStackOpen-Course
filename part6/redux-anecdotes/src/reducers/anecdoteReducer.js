@@ -45,7 +45,6 @@ export const createAnecdote = (content) => {
 export const voteForAnecdote = (id) => {
   return async dispatch => {
     const content = await getOne(id)
-    console.log(content);
     const changedAnecdote = await update({...content, votes: content.votes + 1})
     dispatch(vote(changedAnecdote.id))
   }
