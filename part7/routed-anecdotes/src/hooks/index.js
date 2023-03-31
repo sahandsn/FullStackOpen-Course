@@ -8,5 +8,5 @@ export const useField = (type) => {
     const reset = () => {
         setValue('')
     }
-    return {type, value, onChange, reset}
+    return [{type, value, onChange}, reset]
 }
