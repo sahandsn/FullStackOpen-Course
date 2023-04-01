@@ -24,7 +24,7 @@ const useCountry = (name) => {
       .get(`https://restcountries.com/v3.1/name/${name.trim()}?fullText=true`)
       .then(res => {
         console.log(res.data)
-        setCountry(res.data)
+        setCountry(res.data[0])
       })
       .catch(error => {
         console.log(error.message);
@@ -59,10 +59,10 @@ const Country = ({ country }) => {
 
   return (
     <div>
-      <h3>{country[0].name.common} </h3>
-      <div>capital {country[0].capital[0]} </div>
-      <div>population {country[0].population}</div> 
-      <img src={country[0].flags.png} height='100' alt={`flag of ${country[0].name.official}`}/>  
+      <h3>{country.name.common} </h3>
+      <div>capital {country.capital} </div>
+      <div>population {country.population}</div> 
+      <img src={country.flags.png} height='100' alt={`flag of ${country.name.official}`}/>  
     </div>
   )
 }
