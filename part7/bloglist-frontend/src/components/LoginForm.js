@@ -9,16 +9,16 @@ const LoginForm = ({ setUser, handleMessage }) => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try{
+    try {
       const user = await loginService.login({ username, password })
       setUser(user)
       blogsService.setToken(user.token)
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       setUsername('')
       setPassword('')
-      handleMessage({ message:`welcome ${user.name}`, mode:'green' })
-    } catch(exeption) {
-      handleMessage({ message:'invalid username/password', mode:'red' })
+      handleMessage({ message: `welcome ${user.name}`, mode: 'green' })
+    } catch (exeption) {
+      handleMessage({ message: 'invalid username/password', mode: 'red' })
       console.warn(exeption)
     }
   }
@@ -26,10 +26,22 @@ const LoginForm = ({ setUser, handleMessage }) => {
   return (
     <form onSubmit={handleLogin}>
       <div>
-        username: <input type='text' name='username' value={username} onChange={({ target }) => setUsername(target.value)} />
+        username:{' '}
+        <input
+          type='text'
+          name='username'
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+        />
       </div>
       <div>
-        password: <input type='password' name='password' value={password} onChange={({ target }) => setPassword(target.value)} />
+        password:{' '}
+        <input
+          type='password'
+          name='password'
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+        />
       </div>
       <button type='submit'>Login</button>
     </form>

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -7,12 +7,17 @@ import Togglable from './components/Togglable'
 import Notification from './components/Notification/Notification'
 import blogService from './services/blogs'
 import { setNotification } from '../reducers/notificationReducer'
+import {
+  newBlog,
+  getBlogs,
+  likeBlog,
+  deleteBlog,
+} from './reducers/blogsReducer'
+import { setUser, nullUser } from './reducers/userReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  // const [message, setMessage] = useState({ message: null, mode: 'green' })
   const dispatch = useDispatch()
+  const { blogs, user } = useSelector((state) => state)
 
   const section = {
     border: 'solid',
@@ -23,10 +28,10 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const addBlog = async (newBlog) => {
+  const addBlog = async (newBlogToBeSaved) => {
     try {
-      const savedBlog = await blogService.createOne(newBlog)
-      setBlogs(blogs.concat(savedBlog))
+      const savedBlog = await blogService.createOne(newBlogToBeSaved)
+      dispatch(newBlog(savedBlog))
       blogFormRef.current.toggleVisibility()
       handleMessage({
         message: `a new blog "${savedBlog.title}" by ${savedBlog.author} added`,
@@ -42,13 +47,13 @@ const App = () => {
     blogService
       .getAll()
       .then((blogs) => blogs.sort((a, b) => b.likes - a.likes))
-      .then((blogs) => setBlogs(blogs))
+      .then((blogs) => dispatch(getBlogs(blogs)))
   }, [])
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedUser')
     if (loggedUserJson) {
       const user = JSON.parse(loggedUserJson)
-      setUser(user)
+      dispatch(setUser(user))
       handleMessage({ message: `welcome back ${user.name}`, mode: 'green' })
       blogService.setToken(user.token)
     }
@@ -56,25 +61,15 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
-    setUser(null)
+    dispatch(nullUser())
   }
   const handleMessage = (messageObj) => {
-    // setMessage(newMessage)
-    // setTimeout(() => setMessage({ message: null }), 4000)
     dispatch(setNotification(messageObj, 5))
   }
   const handleLike = async (newBlog) => {
     try {
       const updatedBlog = await blogService.updateOne(newBlog)
-      setBlogs(
-        blogs
-          .map((blog) =>
-            blog.id !== updatedBlog.id
-              ? blog
-              : { ...blog, likes: blog.likes + 1 }
-          )
-          .sort((a, b) => b.likes - a.likes)
-      )
+      dispatch(likeBlog(updatedBlog))
       handleMessage({
         message: `blog ${updatedBlog.title} updated`,
         mode: 'green',
@@ -88,11 +83,7 @@ const App = () => {
     try {
       await blogService.deleteOne(deletedBlog.id)
       handleMessage({ message: 'deleted blog', mode: 'green' })
-      setBlogs(
-        blogs
-          .filter((blog) => blog.id !== deletedBlog.id)
-          .sort((a, b) => b.likes - a.likes)
-      )
+      dispatch(deleteBlog(deletedBlog))
     } catch (exeption) {
       console.log(exeption)
       handleMessage({ message: 'blog was not deleted', mode: 'red' })
