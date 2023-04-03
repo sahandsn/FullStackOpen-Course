@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -29,37 +29,59 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const addBlog = async (newBlogToBeSaved) => {
-    try {
-      const savedBlog = await blogService.createOne(newBlogToBeSaved)
-      dispatch(newBlog(savedBlog))
+  const newBlogMutation = useMutation(blogService.createOne, {
+    onSuccess: (newBlogToBeSaved) => {
+      dispatch(newBlog(newBlogToBeSaved))
       blogFormRef.current.toggleVisibility()
       handleMessage({
-        message: `a new blog "${savedBlog.title}" by ${savedBlog.author} added`,
+        message: `a new blog "${newBlogToBeSaved.title}" by ${newBlogToBeSaved.author} added`,
         mode: 'green',
       })
-    } catch (exeption) {
-      handleMessage({ message: 'invalid entry', mode: 'red' })
-      console.warn(exeption)
-    }
-  }
+    },
+    onError: () => {
+      handleMessage({ message: 'new blog was not created', mode: 'red' })
+    },
+  })
+  const likeBlogMutation = useMutation(blogService.updateOne, {
+    onSuccess: (updatedBlog) => {
+      dispatch(likeBlog(updatedBlog))
+      handleMessage({
+        message: `blog ${updatedBlog.title} liked`,
+        mode: 'green',
+      })
+    },
+    onError: () => {
+      handleMessage({
+        message: 'blog was not liked',
+        mode: 'red',
+      })
+    },
+  })
+  const deleteBlogMutation = useMutation(blogService.deleteOne, {
+    onSuccess: (deletedBlog) => {
+      handleMessage({
+        message: `blog ${deletedBlog.title} deleted`,
+        mode: 'green',
+      })
+      dispatch(deleteBlog(deletedBlog))
+    },
+    onError: () => {
+      handleMessage({
+        message: 'failed to delete blog',
+        mode: 'red',
+      })
+    },
+  })
 
-  useEffect(() => {
-    blogService
-      .getAll()
-      .then((blogs) => blogs.sort((a, b) => b.likes - a.likes))
-      .then((blogs) => dispatch(getBlogs(blogs)))
-  }, [])
-  // const result = useQuery(
-  //   ['blogs'], blogService.getAll, {
-  //     refetchOnWindowFocus: false,
-  //     // retry: 1,
-  //     onSuccess: async (blogs) => {
-  //       await blogs.sort((a, b) => b.likes - a.likes)
-  //       dispatch(getBlogs(blogs))
-  //     }
-  //   }
-  // )
+  const result = useQuery(['blogs'], blogService.getAll, {
+    refetchOnWindowFocus: false,
+    retry: 1,
+    onSuccess: async (blogs) => {
+      await blogs.sort((a, b) => b.likes - a.likes)
+      dispatch(getBlogs(blogs))
+    },
+  })
+
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedUser')
     if (loggedUserJson) {
@@ -70,6 +92,9 @@ const App = () => {
     }
   }, [])
 
+  const handleCreate = (newBlogToBeSaved) => {
+    newBlogMutation.mutate(newBlogToBeSaved)
+  }
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     dispatch(nullUser())
@@ -78,28 +103,10 @@ const App = () => {
     dispatch(setNotification(messageObj, 5))
   }
   const handleLike = async (newBlog) => {
-    try {
-      const updatedBlog = await blogService.updateOne(newBlog)
-      // console.log(updatedBlog)
-      dispatch(likeBlog(updatedBlog))
-      handleMessage({
-        message: `blog ${updatedBlog.title} updated`,
-        mode: 'green',
-      })
-    } catch (exeption) {
-      console.log(exeption)
-      handleMessage({ message: 'blog was not updated', mode: 'red' })
-    }
+    likeBlogMutation.mutate(newBlog)
   }
-  const handleDelete = async (deletedBlog) => {
-    try {
-      await blogService.deleteOne(deletedBlog.id)
-      handleMessage({ message: 'deleted blog', mode: 'green' })
-      dispatch(deleteBlog(deletedBlog))
-    } catch (exeption) {
-      console.log(exeption)
-      handleMessage({ message: 'blog was not deleted', mode: 'red' })
-    }
+  const handleDelete = (deletedBlog) => {
+    deleteBlogMutation.mutate(deletedBlog)
   }
 
   if (user === null) {
@@ -107,36 +114,10 @@ const App = () => {
       <div>
         <Notification />
         <h2>Login to Application</h2>
-        {/* <LoginForm setUser={setUser} handleMessage={handleMessage} /> */}
         <LoginForm />
       </div>
     )
   }
-
-  // if (result.isLoading){
-  //   return(
-  //     <div>
-  //       <p>loading data ...</p>
-  //     </div>
-  //   )
-  // }
-
-  // if (result.isSuccess) {
-  //   return (
-  //     <div>
-  //       {/* <p>anecdote service not available due to problems in server</p> */}
-  //       <p>it worked</p>
-  //     </div>
-  //   )
-  // }
-  // if (result.isError) {
-  //   return (
-  //     <div>
-  //       {/* <p>anecdote service not available due to problems in server</p> */}
-  //       <p>its error</p>
-  //     </div>
-  //   )
-  // }
 
   return (
     <>
@@ -149,8 +130,26 @@ const App = () => {
       <div style={section}>
         <h2>Create New</h2>
         <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-          <BlogForm addBlog={addBlog} />
+          <BlogForm addBlog={handleCreate} />
         </Togglable>
+      </div>
+
+      <div>
+        {user !== null && result.isLoading && (
+          <>
+            <p>Loading blogs...</p>
+          </>
+        )}
+      </div>
+
+      <div>
+        {user !== null && result.isError && (
+          <>
+            <p>
+              Unfortunately, blog service is currently down. Come back later.
+            </p>
+          </>
+        )}
       </div>
 
       <div>
