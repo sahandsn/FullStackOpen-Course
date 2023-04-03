@@ -2,8 +2,6 @@ import { useSelector } from 'react-redux'
 import styles from './Notification.module.css'
 
 const Notification = () => {
-  // { message: { message, mode } }
-  // console.log(message);
   const { message, mode } = useSelector(({ notification }) => notification)
   if (message === null) {
     return null

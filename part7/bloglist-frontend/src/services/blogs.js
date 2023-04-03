@@ -7,7 +7,7 @@ const getAll = async () => {
 }
 
 let token = null
-const setToken = newToken => {
+const setToken = (newToken) => {
   token = `Bearer ${newToken}`
 }
 
@@ -20,7 +20,11 @@ const createOne = async (blog) => {
 
 const updateOne = async (updatedBlog) => {
   const config = { headers: { Authorization: token } }
-  const res = await axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog, config)
+  const res = await axios.put(
+    `${baseUrl}/${updatedBlog.id}`,
+    updatedBlog,
+    config
+  )
   return res.data
 }
 
