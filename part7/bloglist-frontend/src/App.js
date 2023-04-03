@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+// import { useQuery } from '@tanstack/react-query'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification/Notification'
 import blogService from './services/blogs'
-import { setNotification } from '../reducers/notificationReducer'
+import { setNotification } from './reducers/notificationReducer'
 import {
   newBlog,
   getBlogs,
@@ -49,6 +50,16 @@ const App = () => {
       .then((blogs) => blogs.sort((a, b) => b.likes - a.likes))
       .then((blogs) => dispatch(getBlogs(blogs)))
   }, [])
+  // const result = useQuery(
+  //   ['blogs'], blogService.getAll, {
+  //     refetchOnWindowFocus: false,
+  //     // retry: 1,
+  //     onSuccess: async (blogs) => {
+  //       await blogs.sort((a, b) => b.likes - a.likes)
+  //       dispatch(getBlogs(blogs))
+  //     }
+  //   }
+  // )
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedUser')
     if (loggedUserJson) {
@@ -69,6 +80,7 @@ const App = () => {
   const handleLike = async (newBlog) => {
     try {
       const updatedBlog = await blogService.updateOne(newBlog)
+      // console.log(updatedBlog)
       dispatch(likeBlog(updatedBlog))
       handleMessage({
         message: `blog ${updatedBlog.title} updated`,
@@ -95,10 +107,36 @@ const App = () => {
       <div>
         <Notification />
         <h2>Login to Application</h2>
-        <LoginForm setUser={setUser} handleMessage={handleMessage} />
+        {/* <LoginForm setUser={setUser} handleMessage={handleMessage} /> */}
+        <LoginForm />
       </div>
     )
   }
+
+  // if (result.isLoading){
+  //   return(
+  //     <div>
+  //       <p>loading data ...</p>
+  //     </div>
+  //   )
+  // }
+
+  // if (result.isSuccess) {
+  //   return (
+  //     <div>
+  //       {/* <p>anecdote service not available due to problems in server</p> */}
+  //       <p>it worked</p>
+  //     </div>
+  //   )
+  // }
+  // if (result.isError) {
+  //   return (
+  //     <div>
+  //       {/* <p>anecdote service not available due to problems in server</p> */}
+  //       <p>its error</p>
+  //     </div>
+  //   )
+  // }
 
   return (
     <>

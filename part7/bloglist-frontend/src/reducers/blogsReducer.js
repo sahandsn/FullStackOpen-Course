@@ -5,23 +5,23 @@ const blogSlice = createSlice({
   initialState: [],
   reducers: {
     newBlog(state, action) {
-      state.concat(action.payload.savedBlog)
+      return state.concat(action.payload)
     },
     getBlogs(state, action) {
-      return action.payload.blogs
+      return action.payload
     },
     likeBlog(state, action) {
-      state
+      return state
         .map((blog) =>
-          blog.id !== action.payload.updatedBlog.id
+          blog.id !== action.payload.id
             ? blog
             : { ...blog, likes: blog.likes + 1 }
         )
         .sort((a, b) => b.likes - a.likes)
     },
     deleteBlog(state, action) {
-      state
-        .filter((blog) => blog.id !== action.payload.deletedBlog.id)
+      return state
+        .filter((blog) => blog.id !== action.payload.id)
         .sort((a, b) => b.likes - a.likes)
     },
   },
