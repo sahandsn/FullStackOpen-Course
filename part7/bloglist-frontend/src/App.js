@@ -5,12 +5,13 @@ import LoginView from './components/LoginView'
 import { setNotification } from './reducers/notificationReducer'
 import Notification from './components/Notification/Notification'
 import blogService from './services/blogs'
-import Menu from './components/Menu'
+import MenuView from './components/views/MenuView'
 import { setUser } from './reducers/userReducer'
-import LogedinUser from './components/LogedinUser'
-import UsersView from './components/UsersListView'
-import UserMainView from './components/UserMainView'
-import IndividualUserView from './components/IndividualUserView'
+import LogedinUser from './components/views/LogedinUserView'
+import UsersView from './components/views/UsersListView'
+import UserMainView from './components/views/UserMainView'
+import IndividualUserView from './components/views/IndividualUserView'
+import IndividualBlogView from './components/views/IndividualBlogView'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -44,12 +45,16 @@ const App = () => {
   return (
     <>
       <Notification />
-      <Menu section={section} />
+      <MenuView section={section} />
       <LogedinUser section={section} />
       <Routes>
         <Route path='/' element={<UserMainView section={section} />} />
+        <Route path='/blogs/:id' element={<IndividualBlogView />} />
         <Route path='/users' element={<UsersView section={section} />} />
-        <Route path='/users/:id' element={<IndividualUserView section={section} />} />
+        <Route
+          path='/users/:id'
+          element={<IndividualUserView section={section} />}
+        />
       </Routes>
     </>
   )

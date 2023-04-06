@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { getUsers } from '../reducers/usersReducer'
-import { getAll } from '../services/users'
+import { getUsers } from '../../reducers/usersReducer'
+import { getAll } from '../../services/users'
 
 const UsersListView = ({ section }) => {
   const dispatch = useDispatch()
@@ -38,7 +38,9 @@ const UsersListView = ({ section }) => {
                 {result.data.map((user) => {
                   return (
                     <tr key={user.id}>
-                      <td><Link to={`/users/${user.id}`}>{user.username}</Link></td>
+                      <td>
+                        <Link to={`/users/${user.id}`}>{user.username}</Link>
+                      </td>
                       <td>{user.blogs.length}</td>
                     </tr>
                   )

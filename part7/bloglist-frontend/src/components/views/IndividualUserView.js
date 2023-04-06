@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { getUsers } from '../reducers/usersReducer'
-import { getAll } from '../services/users'
+import { getUsers } from '../../reducers/usersReducer'
+import { getAll } from '../../services/users'
 
 const IndividualUserView = ({ section }) => {
   const dispatch = useDispatch()
@@ -32,6 +32,7 @@ const IndividualUserView = ({ section }) => {
     )
   }
   const user = result.data.find((user) => user.id === id)
+
   if (user.blogs.length === 0) {
     return (
       <div style={section}>

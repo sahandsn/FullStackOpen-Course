@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const Menu = ({ section }) => {
+const MenuView = ({ section }) => {
   const padding = {
     paddingRight: 5,
   }
@@ -17,4 +17,4 @@ const Menu = ({ section }) => {
   )
 }
 
-export default Menu
+export default MenuView

@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { nullUser } from '../reducers/userReducer'
+import { nullUser } from '../../reducers/userReducer'
 
-const LogedinUser = ({ section }) => {
+const LogedinUserView = ({ section }) => {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state)
   const handleLogout = () => {
@@ -17,4 +17,4 @@ const LogedinUser = ({ section }) => {
   )
 }
 
-export default LogedinUser
+export default LogedinUserView

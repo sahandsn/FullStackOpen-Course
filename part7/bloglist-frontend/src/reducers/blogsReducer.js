@@ -8,7 +8,7 @@ const blogSlice = createSlice({
       return state.concat(action.payload)
     },
     getBlogs(state, action) {
-      return action.payload
+      return [...action.payload].sort((a, b) => b.likes - a.likes)
     },
     likeBlog(state, action) {
       return state
