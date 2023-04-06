@@ -93,7 +93,7 @@ const UserMainView = ({ section }) => {
         blogFormRef={blogFormRef}
       />
       <div>
-        {user !== null && result.isLoading && (
+        {result.isLoading && (
           <>
             <p>Loading blogs...</p>
           </>
@@ -101,7 +101,7 @@ const UserMainView = ({ section }) => {
       </div>
 
       <div>
-        {user !== null && result.isError && (
+        {result.isError && (
           <>
             <p>
               Unfortunately, blog service is currently down. Come back later.
@@ -111,19 +111,17 @@ const UserMainView = ({ section }) => {
       </div>
 
       <div>
-        {user !== null && (
-          <>
-            {blogs.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                handleLike={handleLike}
-                handleDelete={handleDelete}
-                user={user}
-              />
-            ))}
-          </>
-        )}
+        <>
+          {blogs.map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleLike={handleLike}
+              handleDelete={handleDelete}
+              user={user}
+            />
+          ))}
+        </>
       </div>
     </div>
   )

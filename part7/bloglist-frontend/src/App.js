@@ -8,7 +8,7 @@ import blogService from './services/blogs'
 import Menu from './components/Menu'
 import { setUser } from './reducers/userReducer'
 import LogedinUser from './components/LogedinUser'
-import UsersView from './components/UsersView'
+import UsersView from './components/UsersListView'
 import UserMainView from './components/UserMainView'
 import IndividualUserView from './components/IndividualUserView'
 

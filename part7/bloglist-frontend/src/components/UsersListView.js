@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { getUsers } from '../reducers/usersReducer'
 import { getAll } from '../services/users'
 
-const UsersView = ({ section }) => {
+const UsersListView = ({ section }) => {
   const dispatch = useDispatch()
   const result = useQuery(['users'], getAll, {
     refetchOnWindowFocus: false,
@@ -52,4 +52,4 @@ const UsersView = ({ section }) => {
   )
 }
 
-export default UsersView
+export default UsersListView
