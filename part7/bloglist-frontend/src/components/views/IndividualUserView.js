@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { getUsers } from '../../reducers/usersReducer'
 import { getAll } from '../../services/users'
+import { ListGroup } from 'react-bootstrap'
 
 const IndividualUserView = ({ section }) => {
   const dispatch = useDispatch()
@@ -46,11 +47,11 @@ const IndividualUserView = ({ section }) => {
     <div style={section}>
       <h2>{user.name}</h2>
       <p>added blogs:</p>
-      <ul>
+      <ListGroup numbered>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <ListGroup.Item key={blog.id}>{blog.title}</ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   )
 }

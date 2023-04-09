@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { commentBlog } from '../../reducers/blogsReducer'
 import { useState } from 'react'
 import blogService from '../../services/blogs'
+import { Button, ListGroup, Form, FloatingLabel } from 'react-bootstrap'
 
 const Comments = ({ section, blog, handleMessage }) => {
   const [comment, setComment] = useState('')
@@ -67,22 +68,34 @@ const Comments = ({ section, blog, handleMessage }) => {
   return (
     <div style={section}>
       <h2>Comments</h2>
-      <form onSubmit={addCommentHandler}>
-        <textarea
+      <Form onSubmit={addCommentHandler}>
+        <FloatingLabel
+          controlId='floatingTextarea'
+          label='write your (anonymous) comment'
+        >
+          <Form.Control
+            as='textarea'
+            placeholder='write your (anonymous) comment'
+            name='comment'
+            value={comment}
+            onChange={({ target }) => setComment(target.value)}
+          />
+        </FloatingLabel>
+        {/* <textarea
           rows='5'
           cols='30'
           placeholder='write your (anonymous) comment'
           name='comment'
           value={comment}
           onChange={({ target }) => setComment(target.value)}
-        ></textarea>
-        <button type='submit'>save</button>
-      </form>
-      <ul>
+        ></textarea> */}
+        <Button type='submit'>save</Button>
+      </Form>
+      <ListGroup variant='flush'>
         {blog.comments.map((v, i) => (
-          <li key={i}> {v} </li>
+          <ListGroup.Item key={i}> {v} </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
     </div>
   )
 }

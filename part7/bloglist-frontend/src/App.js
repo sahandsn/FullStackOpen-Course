@@ -43,7 +43,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className='container'>
       <Notification />
       <MenuView section={section} />
       <LogedinUser section={section} />
@@ -56,7 +56,7 @@ const App = () => {
           element={<IndividualUserView section={section} />}
         />
       </Routes>
-    </>
+    </div>
   )
 }
 

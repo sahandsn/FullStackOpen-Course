@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import styles from './Notification.module.css'
+import { Alert } from 'react-bootstrap'
 
 const Notification = () => {
   const { message, mode } = useSelector(({ notification }) => notification)
@@ -7,13 +7,21 @@ const Notification = () => {
     return null
   }
   if (mode === 'green') {
-    return <div className={`${styles.green} success`}>{message}</div>
+    return (
+      <Alert variant='success'>
+        <Alert.Heading>Done!</Alert.Heading> <p>{message}</p>
+      </Alert>
+    )
   } else if (mode === 'red') {
-    return <div className={`${styles.red} error`}>{message}</div>
+    return (
+      <Alert variant='danger'>
+        <Alert.Heading>Error!</Alert.Heading> <p>{message}</p>
+      </Alert>
+    )
   }
   // user modified the input
   else {
-    return <div className={`${styles.gray} unnatural`}>{message}</div>
+    return <Alert variant='secondary'>{message}</Alert>
   }
 }
 

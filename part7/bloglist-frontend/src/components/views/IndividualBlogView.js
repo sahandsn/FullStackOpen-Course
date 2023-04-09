@@ -6,6 +6,7 @@ import { setNotification } from '../../reducers/notificationReducer'
 import blogService from '../../services/blogs'
 import { useParams } from 'react-router'
 import Comments from './CommentsView'
+import { Button } from 'react-bootstrap'
 
 const IndividualBlogView = () => {
   const navigate = useNavigate()
@@ -114,11 +115,11 @@ const IndividualBlogView = () => {
           </a>
           <p>
             Likes: {blog.likes}
-            <button onClick={handleLikeIncrease}>Like</button>
+            <Button onClick={handleLikeIncrease}>Like</Button>
           </p>
           <p>added by {blog.user.username}</p>
           {blog.user.id === user.id && (
-            <button onClick={handleDeleteBlog}>Remove</button>
+            <Button variant='danger' onClick={handleDeleteBlog}>Remove</Button>
           )}
           <Comments
             section={blogStyle}

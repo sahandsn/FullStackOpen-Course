@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getUsers } from '../../reducers/usersReducer'
 import { getAll } from '../../services/users'
+import { Table } from 'react-bootstrap'
 
 const UsersListView = ({ section }) => {
   const dispatch = useDispatch()
@@ -27,7 +28,7 @@ const UsersListView = ({ section }) => {
       <div>
         {result.isSuccess && (
           <>
-            <table>
+            <Table striped bordered hover>
               <thead>
                 <tr>
                   <td></td>
@@ -46,7 +47,7 @@ const UsersListView = ({ section }) => {
                   )
                 })}
               </tbody>
-            </table>
+            </Table>
           </>
         )}
       </div>
