@@ -5,6 +5,7 @@ import { likeBlog, deleteBlog, getBlogs } from '../../reducers/blogsReducer'
 import { setNotification } from '../../reducers/notificationReducer'
 import blogService from '../../services/blogs'
 import { useParams } from 'react-router'
+import Comments from './CommentsView'
 
 const IndividualBlogView = () => {
   const navigate = useNavigate()
@@ -119,6 +120,11 @@ const IndividualBlogView = () => {
           {blog.user.id === user.id && (
             <button onClick={handleDeleteBlog}>Remove</button>
           )}
+          <Comments
+            section={blogStyle}
+            blog={blog}
+            handleMessage={handleMessage}
+          />
         </div>
       </div>
     </>

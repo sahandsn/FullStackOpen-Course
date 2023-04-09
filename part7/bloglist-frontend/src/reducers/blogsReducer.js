@@ -24,8 +24,18 @@ const blogSlice = createSlice({
         .filter((blog) => blog.id !== action.payload.id)
         .sort((a, b) => b.likes - a.likes)
     },
+    commentBlog(state, action) {
+      return state
+        .map((blog) =>
+          blog.id !== action.payload.id
+            ? blog
+            : { ...blog, comments: [...action.payload.comments] }
+        )
+        .sort((a, b) => b.likes - a.likes)
+    },
   },
 })
 
-export const { newBlog, getBlogs, likeBlog, deleteBlog } = blogSlice.actions
+export const { newBlog, getBlogs, likeBlog, deleteBlog, commentBlog } =
+  blogSlice.actions
 export default blogSlice.reducer
