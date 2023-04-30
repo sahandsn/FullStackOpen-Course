@@ -17,8 +17,7 @@ const calculateBmi = (height:number, weight:number) => {
     }  
     else if (40 < score) {
         console.log('Exreme obesity');
-    }  
-    
+    } 
 }
 
 calculateBmi(1.8, 70)
