@@ -8,6 +8,28 @@ interface exerciseType {
   average: number
 }
 
+interface exerciseDataType {
+  data: number[],
+  target: number
+}
+
+const parseArgsArr = (args:string[]):exerciseDataType => {
+  if(args.length < 4) {
+      throw new Error('incorrect input. try: npm run bmiCalculator.ts target data1, ...')
+  }
+  const [run, app, target, ...data] = args
+  const dataArr = data.map(d => Number(d))
+  
+  if(!isNaN(Number(target)) && dataArr.every(d => !isNaN(d))){
+    return {
+      data: dataArr, 
+      target: Number(target)
+    }
+  } else {
+    throw new Error('incorrect input. try: npm run bmiCalculator.ts target data1, ...')
+  }
+}
+
 const calculateExercises = (data: number[], target:number) : exerciseType => {
   const average = data.reduce((total, current) => {
     return total + current
@@ -42,4 +64,14 @@ const calculateExercises = (data: number[], target:number) : exerciseType => {
 
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try{
+  const {data, target} = parseArgsArr(process.argv)
+  const res = calculateExercises(data, target)
+  console.log(res);
+} catch(e:unknown) {
+  let errMsg = 'sth went wrong.'
+  if(e instanceof Error) {
+    errMsg += e.message
+  }
+  console.log(e);
+}
