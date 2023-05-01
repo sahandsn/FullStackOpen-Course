@@ -1,4 +1,4 @@
-interface exerciseType {
+export interface exerciseType {
   periodLength: number;
   trainingDays: number;
   success: boolean;
