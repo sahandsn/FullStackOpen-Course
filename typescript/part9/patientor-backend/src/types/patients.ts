@@ -1,9 +1,15 @@
+export enum Gender {
+  Male = "male",
+  Female = "female",
+  Other = "other"
+}
+
 export type PatientType = {
   id: String,
   name: String,
   dateOfBirth: String,
   ssn: String,
-  gender: String,
+  gender: Gender,
   occupation: String
 }
 
