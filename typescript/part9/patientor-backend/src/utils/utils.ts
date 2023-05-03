@@ -39,8 +39,22 @@ const parseSSN = (ssn: unknown): string => {
   return ssn;
 };
 
+const isDOB = (dob: string): boolean => {
+  const now = new Date();
+  const date = new Date(dob);
+  if (
+    date > now ||
+    date.toString() === 'Invalid Date' ||
+    date.getFullYear() < 1899 ||
+    dob.length !== 10
+  ) {
+    return false;
+  }
+  return true;
+};
+
 const parseDateOfBirth = (dob: unknown): string => {
-  if (!isString(dob)) {
+  if (!isString(dob) || !isDOB(dob)) {
     throw new Error('Incorrect or missing date of birth.');
   }
   return dob;
