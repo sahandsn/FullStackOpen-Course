@@ -1,8 +1,19 @@
-const Content = (props: { number: number; text: string }) => {
+import {Fragment} from 'react'
+import { CoursePart } from '../types/course';
+import Part from './Part';
+
+const Content = (props: { courseParts: CoursePart[] }) => {
   return (
-    <p>
-      {props.text}: {props.number}
-    </p>
+    <>
+      {props.courseParts.map((p, i) => (
+        <Fragment key={i}>
+          <h2>
+            {p.name} {p.exerciseCount}
+          </h2>
+          <Part part={p}  />
+        </Fragment>
+      ))}
+    </>
   );
 };
 
