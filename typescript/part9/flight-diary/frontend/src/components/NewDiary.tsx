@@ -1,12 +1,15 @@
-import { NonSensitiveDiaryEntry } from '../types/diary';
+import { NonSensitiveDiaryEntry, NotificationType } from '../types/diary';
 import { useState, useEffect } from 'react';
 import { addOne } from '../services/diaryService';
 import { Weather, Visibility } from '../types/diary';
+import { AxiosError } from 'axios';
 
 const NewDiary = ({
   setEntries,
+  handleMsg
 }: {
   setEntries: React.Dispatch<React.SetStateAction<NonSensitiveDiaryEntry[]>>;
+  handleMsg: (newMessage: NotificationType) => void
 }) => {
 
   const [weather, setWeather] = useState<Weather>(Weather.Default);
@@ -22,8 +25,19 @@ const NewDiary = ({
       date,
       comment,
     };
-    const addedEntry = await addOne(newEntry);
-    setEntries(prev => prev.concat(addedEntry))
+    try{
+      const addedEntry = await addOne(newEntry);
+      setEntries(prev => prev.concat(addedEntry))
+      handleMsg({text: 'new entry added', mode: 'green'})
+    } catch(e:unknown) {
+      let errMsg = 'Something went wrong: '
+      if(e instanceof AxiosError){
+        errMsg = e.response?.data
+      }
+      // console.log(errMsg);
+      handleMsg({text: errMsg, mode: 'red'})
+    }
+    
 
     setWeather(Weather.Default);
     setVisibility(Visibility.Default);
@@ -51,7 +65,6 @@ const NewDiary = ({
           <label htmlFor='visibility'>Visibility</label>
           <select
             id='visibility'
-            required
             value={visibility}
             onChange={(e) => setVisibility(e.target.value as Visibility)}
           >
@@ -67,7 +80,6 @@ const NewDiary = ({
           <label htmlFor='weather'>Weather</label>
           <select
             id='weather'
-            required
             value={weather}
             onChange={(e) => setWeather(e.target.value as Weather)}
           >
@@ -88,6 +100,7 @@ const NewDiary = ({
             value={comment}
             onChange={({ target }) => setComment(target.value)}
             placeholder='What happened?'
+            required
           ></textarea>
         </div>
 
