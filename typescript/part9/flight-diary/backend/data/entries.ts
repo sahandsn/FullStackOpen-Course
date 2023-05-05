@@ -1,4 +1,4 @@
-import { DiaryEntry, Visibility, Weather } from '../../types/diary';
+import { DiaryEntry, Visibility, Weather } from '../src/types/diary';
 import toNewDiaryEntry from '../src/utils/utils';
 import { v1 as uuid } from 'uuid';
 

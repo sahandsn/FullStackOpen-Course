@@ -1,4 +1,4 @@
-import { NewDiaryEntry, Weather, Visibility } from '../../../types/diary';
+import { NewDiaryEntry, Weather, Visibility } from '../types/diary';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;

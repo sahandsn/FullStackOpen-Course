@@ -4,20 +4,25 @@ import {
   NonSensitiveDiaryEntry,
   DiaryEntry,
   NewDiaryEntry,
-} from '../../../types/diary';
+  Weather,
+  Visibility,
+} from '../types/diary';
 
 const getEntries = (): DiaryEntry[] => {
   return diaryData;
 };
 
 const getNonSensitiveEntries = (): NonSensitiveDiaryEntry[] => {
-  return diaryData.map(({ id, date, weather, visibility, comment }) => ({
-    id,
-    date,
-    weather,
-    visibility,
-    comment
-  }));
+  return diaryData.map((obj) => getNonSensitiveEntry(obj));
+};
+
+const getNonSensitiveEntry = (obj: DiaryEntry): NonSensitiveDiaryEntry => {
+  return {
+    id: obj.id,
+    date: obj.date,
+    weather: obj.weather,
+    visibility: obj.visibility,
+  };
 };
 
 const findById = (id: string): DiaryEntry | undefined => {
@@ -25,14 +30,31 @@ const findById = (id: string): DiaryEntry | undefined => {
   return entry;
 };
 
-const addDiary = (entry: NewDiaryEntry): DiaryEntry => {
+const addDiary = (entry: NewDiaryEntry): NonSensitiveDiaryEntry => {
   const newDiaryEntry = {
     id: uuid(),
     ...entry,
   };
 
   diaryData.push(newDiaryEntry);
-  return newDiaryEntry;
+  return getNonSensitiveEntry(newDiaryEntry);
+};
+
+const getOptions = (option:string): string[] => {
+  // return Object.values(option).map((v) => v.toString());
+  console.log(Weather);
+  
+  switch(option){
+    case 'weather':{
+      return Object.values(Weather).map((v) => v.toString());
+    }
+    case 'visibility':{
+      return Object.values(Visibility).map((v) => v.toString());
+    }
+    default:{
+      return ['sth went wrong.']
+    }
+  }
 };
 
 export default {
@@ -40,4 +62,5 @@ export default {
   addDiary,
   getNonSensitiveEntries,
   findById,
+  getOptions,
 };

@@ -1,5 +1,5 @@
-import { DiaryEntry } from '../../../types/diary';
-const DiaryEntries = ({ entries }: { entries: DiaryEntry[] }) => {
+import { NonSensitiveDiaryEntry } from '../types/diary';
+const DiaryEntries = ({ entries }: { entries: NonSensitiveDiaryEntry[] }) => {
   return (
     <>
       <h2>Diary Entries</h2>

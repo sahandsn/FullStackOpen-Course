@@ -1,8 +1,13 @@
 import axios from 'axios';
-import { DiaryEntry } from '../../../types/diary';
-const baseUrl = 'http://localhost:3001/api';
+import { NonSensitiveDiaryEntry, NewDiaryEntry } from '../types/diary';
+const baseUrl = 'http://localhost:3001/api/diaries';
 
-export const getAll = async () => {
-  const { data } = await axios.get<DiaryEntry[]>(`${baseUrl}/diaries`);
+export const getAllNonsensitive = async () => {
+  const { data } = await axios.get<NonSensitiveDiaryEntry[]>(`${baseUrl}`);
+  return data;
+};
+
+export const addOne = async (obj: NewDiaryEntry) => {
+  const { data } = await axios.post<NonSensitiveDiaryEntry>(`${baseUrl}`, obj);
   return data;
 };
