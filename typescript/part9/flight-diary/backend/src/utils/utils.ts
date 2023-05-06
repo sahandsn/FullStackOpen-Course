@@ -1,4 +1,4 @@
-import { NewDiaryEntry, Weather, Visibility } from '../types/diary';
+import { NewDiaryEntry, Weather, Visibility } from '../../../types/diary';
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -13,7 +13,18 @@ const parseComment = (comment: unknown): string => {
 };
 
 const isDate = (date: string): boolean => {
-  return Boolean(Date.parse(date));
+  // return Boolean(Date.parse(date));
+  const now = new Date();
+  const givenDate = new Date(date);
+  if (
+    givenDate > now ||
+    givenDate.toString() === 'Invalid Date' ||
+    givenDate.getFullYear() < 1899 ||
+    date.length !== 10
+  ) {
+    return false;
+  }
+  return true;
 };
 
 const parseDate = (date: unknown): string => {

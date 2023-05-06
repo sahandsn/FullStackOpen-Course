@@ -1,5 +1,4 @@
 export enum Weather {
-  Default = '--Please choose an option--',
   Sunny = 'sunny',
   Rainy = 'rainy',
   Cloudy = 'cloudy',
@@ -8,7 +7,6 @@ export enum Weather {
 }
 
 export enum Visibility {
-  Default = '--Please choose an option--',
   Great = 'great',
   Good = 'good',
   Ok = 'ok',
@@ -27,4 +25,4 @@ export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
 
 export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>;
 
-export type NotificationType = {text:string|null, mode:string}
+export type NotificationType = { text: string | null; mode: string };

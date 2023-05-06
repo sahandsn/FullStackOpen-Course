@@ -6,7 +6,7 @@ import {
   NewDiaryEntry,
   Weather,
   Visibility,
-} from '../types/diary';
+} from '../../../types/diary';
 
 const getEntries = (): DiaryEntry[] => {
   return diaryData;
@@ -40,19 +40,16 @@ const addDiary = (entry: NewDiaryEntry): NonSensitiveDiaryEntry => {
   return getNonSensitiveEntry(newDiaryEntry);
 };
 
-const getOptions = (option:string): string[] => {
-  // return Object.values(option).map((v) => v.toString());
-  console.log(Weather);
-  
-  switch(option){
-    case 'weather':{
+const getOptions = (option: string): string[] => {
+  switch (option) {
+    case 'weather': {
       return Object.values(Weather).map((v) => v.toString());
     }
-    case 'visibility':{
+    case 'visibility': {
       return Object.values(Visibility).map((v) => v.toString());
     }
-    default:{
-      return ['sth went wrong.']
+    default: {
+      return ['sth went wrong.'];
     }
   }
 };

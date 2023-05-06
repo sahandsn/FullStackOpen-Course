@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NonSensitiveDiaryEntry, NotificationType } from './types/diary';
+import { NonSensitiveDiaryEntry, NotificationType } from '../../types/diary';
 import { getAllNonsensitive } from './services/diaryService';
 import DiaryEntries from './components/DiaryEntries';
 import NewDiary from './components/NewDiary';

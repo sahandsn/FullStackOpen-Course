@@ -1,46 +1,60 @@
-import { NonSensitiveDiaryEntry, NotificationType } from '../types/diary';
-import { useState, useEffect } from 'react';
+import {
+  NewDiaryEntry,
+  NonSensitiveDiaryEntry,
+  NotificationType,
+} from '../../../types/diary';
+import { useState, useEffect, Fragment } from 'react';
 import { addOne } from '../services/diaryService';
-import { Weather, Visibility } from '../types/diary';
+import { getOptions } from '../services/optionService';
 import { AxiosError } from 'axios';
 
 const NewDiary = ({
   setEntries,
-  handleMsg
+  handleMsg,
 }: {
   setEntries: React.Dispatch<React.SetStateAction<NonSensitiveDiaryEntry[]>>;
-  handleMsg: (newMessage: NotificationType) => void
+  handleMsg: (newMessage: NotificationType) => void;
 }) => {
+  const [weatherOptions, setWeatherOptions] = useState<string[]>([]);
+  const [visibilityOptions, setVisibilityOptions] = useState<string[]>([]);
 
-  const [weather, setWeather] = useState<Weather>(Weather.Default);
-  const [visibility, setVisibility] = useState<Visibility>(Visibility.Default);
+  const [weather, setWeather] = useState('');
+  const [visibility, setVisibility] = useState('');
   const [date, setDate] = useState('');
   const [comment, setComment] = useState('');
 
+  useEffect(() => {
+    (async () => {
+      const [weather, visibility] = await Promise.all([getOptions('weather'), getOptions('visibility')])
+      setVisibilityOptions(visibility)
+      setWeatherOptions(weather)
+    })()
+  }, [])
+
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
     const newEntry = {
       weather,
       visibility,
       date,
       comment,
     };
-    try{
-      const addedEntry = await addOne(newEntry);
-      setEntries(prev => prev.concat(addedEntry))
-      handleMsg({text: 'new entry added', mode: 'green'})
-    } catch(e:unknown) {
-      let errMsg = 'Something went wrong: '
-      if(e instanceof AxiosError){
-        errMsg = e.response?.data
-      }
-      // console.log(errMsg);
-      handleMsg({text: errMsg, mode: 'red'})
-    }
-    
 
-    setWeather(Weather.Default);
-    setVisibility(Visibility.Default);
+    try {
+      const addedEntry = await addOne(newEntry as NewDiaryEntry);
+      setEntries((prev) => prev.concat(addedEntry));
+      handleMsg({ text: 'new entry added', mode: 'green' });
+    } catch (e: unknown) {
+      let errMsg = 'Something went wrong: ';
+      if (e instanceof AxiosError) {
+        errMsg = e.response?.data;
+      }
+      handleMsg({ text: errMsg, mode: 'red' });
+    }
+
+    setWeather('');
+    setVisibility('');
     setComment('');
     setDate('');
   };
@@ -52,7 +66,6 @@ const NewDiary = ({
         <div>
           <label htmlFor='date'>Date</label>
           <input
-            required
             type='date'
             placeholder='YYYY-MM-DD'
             id='date'
@@ -62,33 +75,47 @@ const NewDiary = ({
         </div>
 
         <div>
-          <label htmlFor='visibility'>Visibility</label>
-          <select
-            id='visibility'
-            value={visibility}
-            onChange={(e) => setVisibility(e.target.value as Visibility)}
-          >
-            {Object.values(Visibility).map((v) => (
-              <option value={v.toString()} key={v.toString()}>
-                {v.toString()}
-              </option>
-            ))}
-          </select>
+          <fieldset>
+            <legend>Visibility</legend>
+            <div>
+              {visibilityOptions.map((v) => (
+                <Fragment key={v.toString()}>
+                  <input
+                    checked={visibility === v.toString()}
+                    type='radio'
+                    value={v.toString()}
+                    id={v.toString()}
+                    name='visibility'
+                    onChange={(e) =>
+                      setVisibility(e.target.value)
+                    }
+                  />
+                  <label htmlFor={v.toString()}>{v.toString()}</label>
+                </Fragment>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         <div>
-          <label htmlFor='weather'>Weather</label>
-          <select
-            id='weather'
-            value={weather}
-            onChange={(e) => setWeather(e.target.value as Weather)}
-          >
-            {Object.values(Weather).map((v) => (
-              <option value={v.toString()} key={v.toString()}>
-                {v.toString()}
-              </option>
-            ))}
-          </select>
+          <fieldset>
+            <legend>Weather</legend>
+            <div>
+              {weatherOptions.map((v) => (
+                <Fragment key={v.toString()}>
+                  <input
+                    checked={weather === v.toString()}
+                    type='radio'
+                    value={v.toString()}
+                    id={v.toString()}
+                    name='weather'
+                    onChange={(e) => setWeather(e.target.value)}
+                  />
+                  <label htmlFor={v.toString()}>{v.toString()}</label>
+                </Fragment>
+              ))}
+            </div>
+          </fieldset>
         </div>
 
         <div>
@@ -100,7 +127,6 @@ const NewDiary = ({
             value={comment}
             onChange={({ target }) => setComment(target.value)}
             placeholder='What happened?'
-            required
           ></textarea>
         </div>
 

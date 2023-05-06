@@ -1,4 +1,4 @@
-import { NotificationType } from '../types/diary'
+import { NotificationType } from '../../../types/diary'
 
 const Notification = ({ text, mode } : NotificationType) => {
   // console.log(message);
