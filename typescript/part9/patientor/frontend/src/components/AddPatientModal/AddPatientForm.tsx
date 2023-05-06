@@ -61,6 +61,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           fullWidth
           value={ssn}
           onChange={({ target }) => setSsn(target.value)}
+          margin="dense"
         />
         <TextField
           label="Date of birth"
@@ -68,12 +69,14 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
           fullWidth
           value={dateOfBirth}
           onChange={({ target }) => setDateOfBirth(target.value)}
+          margin="dense"
         />
         <TextField
           label="Occupation"
           fullWidth
           value={occupation}
           onChange={({ target }) => setOccupation(target.value)}
+          margin="dense"
         />
 
         <InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
