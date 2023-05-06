@@ -11,7 +11,8 @@ export type PatientType = {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[];
 };
-
-export type NonSeneitivePatientType = Omit<PatientType, 'ssn'>;
-export type NewPatientType = Omit<PatientType, 'id'>;
+export interface Entry {}
+export type NonSeneitivePatientType = Omit<PatientType, 'ssn'|'entries'>;
+export type NewPatientType = Omit<PatientType, 'id' | 'entries'>;

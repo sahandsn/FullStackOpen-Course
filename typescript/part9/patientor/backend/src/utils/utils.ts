@@ -60,6 +60,13 @@ const parseDateOfBirth = (dob: unknown): string => {
   return dob;
 };
 
+// const parseEntries = (entries: unknown): string[] => {
+//   if (!Array.isArray(entries) || !entries.every(e => isString(e))) {
+//     throw new Error('Incorrect or missing entries.');
+//   }
+//   return entries;
+// };
+
 const toNewPatient = (obj: unknown): NewPatientType => {
   if (!obj || typeof obj !== 'object') {
     throw new Error('Incorrect or missing data');

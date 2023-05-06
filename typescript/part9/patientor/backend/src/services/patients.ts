@@ -6,6 +6,23 @@ import {
   PatientType,
 } from '../types/patients';
 
+const findById = (id:string):PatientType|string => {
+  const res =  patientsData.find(p => p.id === id)
+  if(res){
+    return res
+  } else {
+    return 'patient not found.'
+  }
+} 
+
+const getPatient = (id:string) => {
+  const patient = findById(id)
+  if(typeof patient !== 'object'){
+    throw new Error('Incorrect or missing patient');
+  }
+  return patient
+}
+
 const getNonSensitivePatients = (): NonSeneitivePatientType[] => {
   return patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
@@ -19,6 +36,7 @@ const getNonSensitivePatients = (): NonSeneitivePatientType[] => {
 const addNewPatient = (patient: NewPatientType): NonSeneitivePatientType => {
   const newPatient: PatientType = {
     id: uuid(),
+    entries: [],
     ...patient,
   };
   patientsData.push(newPatient);
@@ -30,4 +48,5 @@ const addNewPatient = (patient: NewPatientType): NonSeneitivePatientType => {
 export default {
   getNonSensitivePatients,
   addNewPatient,
+  getPatient
 };
