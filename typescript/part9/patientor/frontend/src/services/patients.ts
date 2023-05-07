@@ -25,5 +25,5 @@ const getOne = async (id: string) => {
 export default {
   getAll,
   create,
-  getOne
+  getOne,
 };
