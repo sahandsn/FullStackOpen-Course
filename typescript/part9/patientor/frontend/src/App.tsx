@@ -9,7 +9,7 @@ import { Diagnosis, Patient } from './types';
 import patientService from './services/patients';
 import diagnosisService from './services/diagnosis';
 import PatientListPage from './components/PatientListPage';
-import PatientPage from './components/PatientPage';
+import PatientPage from './components/PatientPage/PatientPage';
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -47,11 +47,13 @@ const App = () => {
                 <PatientListPage
                   patients={patients}
                   setPatients={setPatients}
-                  
                 />
               }
             />
-            <Route path='/:id' element={<PatientPage diagnosis={diagnosis}/>} />
+            <Route
+              path='/:id'
+              element={<PatientPage diagnosis={diagnosis} />}
+            />
           </Routes>
         </Container>
       </Router>

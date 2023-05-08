@@ -1,15 +1,20 @@
 import { useParams } from 'react-router-dom';
-import { Fragment, useEffect, useState } from 'react';
-import { Typography, Icon } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
 import { Male, Female, Transgender } from '@mui/icons-material';
 
-import { Patient, Diagnosis } from '../types';
+import { Patient, Diagnosis } from '../../types';
 
-import patientServise from '../services/patients';
+import patientServise from '../../services/patients';
+
+import EntryDetails from "./EntryDetails/index"
+import PatientEntry from './EntryDetails/index';
 
 const PatientPage = ({ diagnosis }: { diagnosis: Diagnosis[] }) => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient>();
+
+  
 
   useEffect(() => {
     (async () => {
@@ -21,7 +26,7 @@ const PatientPage = ({ diagnosis }: { diagnosis: Diagnosis[] }) => {
     <>
       <Typography variant='h4' style={{ marginTop: '0.5em' }}>
         <p>
-          {patient?.name}{' '}
+          {patient?.name}
           {patient?.gender === 'male' ? (
             <Male />
           ) : patient?.gender === 'female' ? (
@@ -38,19 +43,9 @@ const PatientPage = ({ diagnosis }: { diagnosis: Diagnosis[] }) => {
           <p>entries</p>
         </Typography>
       )}
+
       {patient?.entries?.map((e) => (
-        <Fragment key={e.id}>
-          <p>
-            {e.date}: {e.description}
-          </p>
-          {e.diagnosisCodes && (
-            <ul>
-              {e.diagnosisCodes.map((c) => (
-                <li key={c}>{c}: {diagnosis!.find(d => d.code === c)?.name}</li>
-              ))}
-            </ul>
-          )}
-        </Fragment>
+        <PatientEntry  diagnosis={diagnosis} entry={e} key={e.id}/>
       ))}
     </>
   );
