@@ -4,15 +4,15 @@ import {
   NonSeneitivePatientType,
   NewPatientType,
   PatientType,
+  Entry,
 } from '../types/patients';
 
-const findById = (id:string):PatientType|string => {
+const findById = (id:string):PatientType => {
   const res =  patientsData.find(p => p.id === id)
-  if(res){
-    return res
-  } else {
-    return 'patient not found.'
-  }
+  if(res === undefined){
+    throw new Error('patient not found')
+  } 
+  return res
 } 
 
 const getPatient = (id:string) => {
@@ -45,8 +45,15 @@ const addNewPatient = (patient: NewPatientType): NonSeneitivePatientType => {
   return { id, name, dateOfBirth, gender, occupation };
 };
 
+const addNewEntry = (newEntry: Entry, id:string): Entry => {
+  const patient = findById(id)
+  patient.entries.push(newEntry)
+  return newEntry
+};
+
 export default {
   getNonSensitivePatients,
   addNewPatient,
-  getPatient
+  getPatient,
+  addNewEntry
 };

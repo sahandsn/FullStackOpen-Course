@@ -27,6 +27,12 @@ const HospitalEntry = ({
           ))}
         </ul>
       )}
+      {entry.discharge && (
+        <ul>
+        <li style={{listStyleType:'circle'}}>discharge date: {entry.discharge.date}</li>
+        <li style={{listStyleType:'circle'}}>discharge criteria: {entry.discharge.criteria}</li>
+      </ul>
+      )}
       <p>diagnosed by {entry.specialist}</p>
     </div>
   );
