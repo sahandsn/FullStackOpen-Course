@@ -42,6 +42,8 @@ router.post('/:id/entries', (req, res) => {
     if (e instanceof Error) {
       errMsg += e.message;
     }
+    console.log(errMsg);
+    
     return res.status(400).send(errMsg);
   }
 });

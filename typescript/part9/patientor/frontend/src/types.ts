@@ -5,9 +5,9 @@ export interface Diagnosis {
 }
 
 export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
+  Male = 'male',
+  Female = 'female',
+  Other = 'other',
 }
 
 export interface Patient {
@@ -17,12 +17,12 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries?:Entry[]
+  entries?: Entry[];
 }
 
-export type PatientFormValues = Omit<Patient, "id" | "entries">;
+export type PatientFormValues = Omit<Patient, 'id' | 'entries'>;
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -34,7 +34,7 @@ export enum HealthCheckRating {
   Healthy,
   LowRisk,
   HighRisk,
-  CriticalRisk
+  CriticalRisk,
 }
 
 export type Entry =
@@ -43,21 +43,42 @@ export type Entry =
   | HealthCheckEntry;
 
 export interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+  type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 export interface OccupationalHealthcareEntry extends BaseEntry {
-  type: "OccupationalHealthcare";
+  type: 'OccupationalHealthcare';
   sickLeave?: {
-    startDate: string,
-    endDate: string,
+    startDate: string;
+    endDate: string;
   };
-  employerName?: string
+  employerName?: string;
 }
 export interface HospitalEntry extends BaseEntry {
-  type: "Hospital";
+  type: 'Hospital';
   discharge: {
-    date: string,
-    criteria: string,
+    date: string;
+    criteria: string;
   };
+}
+
+export enum Type {
+  HealthCheck = 'HealthCheck',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  Hospital = 'Hospital',
+}
+
+type BetterOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+type ToNewEntry = BetterOmit<Entry, 'id' | 'type'>;
+export type NewEntry = ToNewEntry & {
+  type: 'HealthCheck' | 'OccupationalHealthcare' | 'Hospital';
+};
+
+export enum HealthCheckRatingString {
+  Healthy = '0',
+  LowRisk = '1',
+  HighRisk = '2',
+  CriticalRisk = '3',
 }

@@ -14,7 +14,7 @@ import { DiagnosisType } from '../types/diagnosis';
 import { v1 as uuid } from 'uuid';
 
 const isString = (text: unknown): text is string => {
-  return typeof text === 'string' || text instanceof String;
+  return (typeof text === 'string' || text instanceof String) && text.length !== 0;
 };
 
 // const parseName = (name: unknown): string => {
@@ -144,7 +144,9 @@ export const toNewEntry = (obj: unknown): Entry => {
       // type: parseEntryType(obj.type),
     };
     if ('diagnosisCodes' in obj) {
-      newEntry.diagnosisCodes = parseDiagnosisCodes(obj.diagnosisCodes);
+      // console.log(obj.diagnosisCodes);
+      
+      newEntry.diagnosisCodes = parseDiagnosisCodes(obj);
     }
     switch (obj.type) {
       case 'HealthCheck': {
@@ -154,6 +156,8 @@ export const toNewEntry = (obj: unknown): Entry => {
             healthCheckRating: parseHealthCheckRating(obj.healthCheckRating),
             type: obj.type,
           };
+          // console.log(HealthCheckNewEntry);
+          
           return HealthCheckNewEntry;
         }
         throw new Error('incorrect or missing entry type: HealthCheckRating');
@@ -186,7 +190,7 @@ export const toNewEntry = (obj: unknown): Entry => {
           };
           return HospitalNewEntry;
         }
-        throw new Error('incorrect or missing entry type: Hospital');
+        throw new Error('incorrect or missing entry type: Discharge');
       }
       default: {
         throw new Error('incorrect or missing entry type: unrecognized type');
