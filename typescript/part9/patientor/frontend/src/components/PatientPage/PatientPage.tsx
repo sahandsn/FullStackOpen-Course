@@ -27,32 +27,8 @@ const PatientPage = ({ diagnosis }: { diagnosis: Diagnosis[] }) => {
   };
 
   const submitNewEntry = async (entry: NewEntry) => {
-    // try {
-    //   const patient = await patientService.create(values);
-    //   setPatients(patients.concat(patient));
-    //   setModalOpen(false);
-    // } catch (e: unknown) {
-    //   if (axios.isAxiosError(e)) {
-    //     if (e?.response?.data && typeof e?.response?.data === 'string') {
-    //       const message = e.response.data.replace(
-    //         'Something went wrong. Error: ',
-    //         ''
-    //       );
-    //       console.error(message);
-    //       setError(message);
-    //     } else {
-    //       setError('Unrecognized axios error');
-    //     }
-    //   } else {
-    //     console.error('Unknown error', e);
-    //     setError('Unknown error');
-    //   }
-    // }
-    // console.log(entry);
     try {
       const addedEntry = await patientServise.addEntry(id as string, entry);
-      // console.log(addedEntry);
-
       setModalOpen(false);
       setError(undefined)
       if (patient !== undefined) {
@@ -68,7 +44,6 @@ const PatientPage = ({ diagnosis }: { diagnosis: Diagnosis[] }) => {
     } catch (e: unknown) {
       let errMsg = 'something went wrong. ';
       if (e instanceof AxiosError) {
-        // console.log(e);
         errMsg = e.response?.data;
       }
       setError(errMsg);

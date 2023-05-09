@@ -35,11 +35,6 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
     setError(undefined);
   };
 
-  // onClick={() => patientPageHandler(patient.id)}
-  // const patientPageHandler = (id: string) => {
-  //   navigate(`${id}`);
-  // };
-
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const patient = await patientService.create(values);
