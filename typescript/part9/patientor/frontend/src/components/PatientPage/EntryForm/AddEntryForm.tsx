@@ -66,6 +66,11 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
     HealthCheckRating.Healthy
   );
 
+  const [sickLeave, setSickLeave] = useState({ startDate: '', endDate: '' });
+  const [employerName, setEmployerName] = useState('');
+
+  const [discharge, setDischarge] = useState({ date: '', criteria: '' });
+
   const onTypeChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault();
     if (typeof event.target.value === 'string') {
@@ -106,7 +111,6 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
   };
   const onDiagnosisCodesChange = (event: SelectChangeEvent<string[]>) => {
     event.preventDefault();
-    console.log(event.target.value);
     if (typeof event.target.value === 'string') {
       setDiagnosisCodes([event.target.value]);
     } else {
@@ -130,6 +134,23 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
           healthCheckRating,
         };
         onSubmit(HealthCheckData);
+        break;
+      }
+      case 'OccupationalHealthcare': {
+        const OccupationalHealthcareData = {
+          ...data,
+          sickLeave,
+          employerName,
+        };
+        onSubmit(OccupationalHealthcareData);
+        break;
+      }
+      case 'Hospital': {
+        const HospitalData = {
+          ...data,
+          discharge,
+        };
+        onSubmit(HospitalData);
         break;
       }
       default: {
@@ -159,7 +180,15 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
           </Select>
         </FormControl>
 
-        <Divider />
+        <Divider
+          style={{
+            background: '#eae8e4',
+            height: '2px',
+            marginTop: '1rem',
+            marginBottom: '1rem',
+          }}
+          variant='middle'
+        />
 
         <TextField
           label='Description'
@@ -170,8 +199,10 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
         />
 
         <TextField
-          fullWidth
           type='date'
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          label='Entry date'
           value={date}
           onChange={({ target }) => setDate(target.value)}
           margin='dense'
@@ -206,7 +237,15 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
           </Select>
         </FormControl>
 
-        <Divider />
+        <Divider
+          style={{
+            background: '#eae8e4',
+            height: '2px',
+            marginTop: '1rem',
+            marginBottom: '1rem',
+          }}
+          variant='middle'
+        />
 
         {type === 'HealthCheck' && (
           <FormControl margin='dense' fullWidth>
@@ -230,7 +269,68 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnosis }: Props) => {
           </FormControl>
         )}
 
-        <Grid>
+        {type === 'Hospital' && (
+          <>
+            <TextField
+              label='Discharge Date'
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              type='date'
+              value={discharge.date}
+              onChange={({ target }) =>
+                setDischarge((prev) => ({ ...prev, date: target.value }))
+              }
+              margin='dense'
+            />
+            <TextField
+              label='Discharge Criteria'
+              fullWidth
+              value={discharge.criteria}
+              onChange={({ target }) =>
+                setDischarge((prev) => ({ ...prev, criteria: target.value }))
+              }
+              margin='dense'
+            />
+          </>
+        )}
+
+        {type === 'OccupationalHealthcare' && (
+          <>
+            <TextField
+              label='Employer name'
+              fullWidth
+              value={employerName}
+              onChange={({ target }) => setEmployerName(target.value)}
+              margin='dense'
+            />
+
+            <InputLabel>Sick leave</InputLabel>
+            <TextField
+              label='Start'
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              type='date'
+              value={sickLeave.startDate}
+              onChange={({ target }) =>
+                setSickLeave((prev) => ({ ...prev, startDate: target.value }))
+              }
+              margin='dense'
+            />
+            <TextField
+              label='End'
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              type='date'
+              value={sickLeave.endDate}
+              onChange={({ target }) =>
+                setSickLeave((prev) => ({ ...prev, endDate: target.value }))
+              }
+              margin='dense'
+            />
+          </>
+        )}
+
+        <Grid margin='1rem'>
           <Grid item>
             <Button
               color='secondary'

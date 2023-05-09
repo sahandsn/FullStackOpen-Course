@@ -7,7 +7,6 @@ import { Patient, Diagnosis, NewEntry } from '../../types';
 
 import patientServise from '../../services/patients';
 
-import EntryDetails from './EntryDetails/index';
 import PatientEntry from './EntryDetails/index';
 import AddEntryModal from './EntryForm';
 import { AxiosError } from 'axios';
@@ -85,7 +84,8 @@ const PatientPage = ({ diagnosis }: { diagnosis: Diagnosis[] }) => {
         navigate('/');
       }
     })();
-  }, []);
+  }, [id, navigate]);
+
   return (
     <>
       <Typography variant='h4' style={{ marginTop: '0.5em' }}>

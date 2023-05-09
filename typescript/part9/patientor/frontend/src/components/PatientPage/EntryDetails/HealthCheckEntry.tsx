@@ -3,10 +3,8 @@ import {
   Diagnosis,
 } from '../../../types';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import HealthRatingBar from '../../HealthRatingBar';
-import { Typography } from '@mui/material';
 
 const HealthCheckEntry = ({
   diagnosis,
@@ -29,7 +27,7 @@ const HealthCheckEntry = ({
         {entry.date} <HealthAndSafetyIcon />
       </p>
       <p>{entry.description}</p>
-      {/* <FavoriteIcon style={{color:'red', opacity:`${1 - (entry.healthCheckRating * 0.3)}`}}/> */}
+      
       <HealthRatingBar showText={false} rating={entry.healthCheckRating}/>
       {entry.diagnosisCodes && (
         <ul>

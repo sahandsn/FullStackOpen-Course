@@ -14,15 +14,10 @@ import { DiagnosisType } from '../types/diagnosis';
 import { v1 as uuid } from 'uuid';
 
 const isString = (text: unknown): text is string => {
-  return (typeof text === 'string' || text instanceof String) && text.length !== 0;
+  return (
+    (typeof text === 'string' || text instanceof String) && text.length !== 0
+  );
 };
-
-// const parseName = (name: unknown): string => {
-//   if (!isString(name)) {
-//     throw new Error('Incorrect or missing name.');
-//   }
-//   return name;
-// };
 
 const isGender = (gender: string): gender is Gender => {
   return Object.values(Gender)
@@ -37,27 +32,10 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
-// const parseOccupation = (occupation: unknown): string => {
-//   if (!isString(occupation)) {
-//     throw new Error('Incorrect or missing occupation.');
-//   }
-//   return occupation;
-// };
-
-// const parseSSN = (ssn: unknown): string => {
-//   if (!isString(ssn)) {
-//     throw new Error('Incorrect or missing ssn.');
-//   }
-//   return ssn;
-// };
-
 const isDate = (d: string): boolean => {
-  // const now = new Date();
   const date = new Date(d);
-  // console.log(d.length);
 
   if (
-    // date > now ||
     date.toString() === 'Invalid Date' ||
     date.getFullYear() < 1899 ||
     d.length !== 10
@@ -73,13 +51,6 @@ const parseDate = (dob: unknown): string => {
   }
   return dob;
 };
-
-// const parseEntries = (entries: unknown): string[] => {
-//   if (!Array.isArray(entries) || !entries.every(e => isString(e))) {
-//     throw new Error('Incorrect or missing entries.');
-//   }
-//   return entries;
-// };
 
 export const toNewPatient = (obj: unknown): NewPatientType => {
   if (!obj || typeof obj !== 'object') {
@@ -108,7 +79,6 @@ export const toNewPatient = (obj: unknown): NewPatientType => {
 
 const parseDiagnosisCodes = (object: unknown): Array<DiagnosisType['code']> => {
   if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
-    // we will just trust the data to be in correct form
     return [] as Array<DiagnosisType['code']>;
   }
 
@@ -128,24 +98,18 @@ export const toNewEntry = (obj: unknown): Entry => {
   }
 
   if (
-    // 'id' in obj &&
     'description' in obj &&
     'date' in obj &&
     'specialist' in obj &&
     'type' in obj
-    // 'diagnosisCodes' in obj
   ) {
     const newEntry: BaseEntry = {
-      // id: parseString(obj.id, 'patient id'),
       id: uuid(),
       description: parseString(obj.description, 'entry description'),
       date: parseDate(obj.date),
       specialist: parseString(obj.specialist, 'specialist'),
-      // type: parseEntryType(obj.type),
     };
     if ('diagnosisCodes' in obj) {
-      // console.log(obj.diagnosisCodes);
-      
       newEntry.diagnosisCodes = parseDiagnosisCodes(obj);
     }
     switch (obj.type) {
@@ -156,27 +120,22 @@ export const toNewEntry = (obj: unknown): Entry => {
             healthCheckRating: parseHealthCheckRating(obj.healthCheckRating),
             type: obj.type,
           };
-          // console.log(HealthCheckNewEntry);
-          
           return HealthCheckNewEntry;
         }
         throw new Error('incorrect or missing entry type: HealthCheckRating');
       }
       case 'OccupationalHealthcare': {
-        // if('HealthCheckRating' in obj){
-        //   const HealthCheckNewEntry: HealthCheckEntry = {
-        //     ...newEntry,
-        //     healthCheckRating: parseHealthCheckRating(obj.HealthCheckRating)
-        //   }
-        //   return HealthCheckNewEntry
-        // }
         const OccupationalHealthcareNewEntry: OccupationalHealthcareEntry = {
           ...newEntry,
           type: obj.type,
         };
-        if ('sickLeave' in obj) {
-          OccupationalHealthcareNewEntry.sickLeave = parseSickLeave(
-            obj.sickLeave
+        if ('sickLeave' in obj && isSickLeave(obj.sickLeave)) {
+          OccupationalHealthcareNewEntry.sickLeave = obj.sickLeave;
+        }
+        if ('employerName' in obj && isString(obj.employerName)) {
+          OccupationalHealthcareNewEntry.employerName = parseString(
+            obj.employerName,
+            'employer name'
           );
         }
         return OccupationalHealthcareNewEntry;
@@ -200,26 +159,6 @@ export const toNewEntry = (obj: unknown): Entry => {
 
   throw new Error('Incorrect data: a field missing in patient entry');
 };
-
-// const parseEntryType = (x: unknown): 'Hospital' | 'OccupationalHealthcare' | 'HealthCheck' => {
-//   switch (x) {
-//     case 'Hospital': return x;
-//     case 'HealthCheck': return x;
-//     case 'OccupationalHealthcare': return x;
-//     default: throw 'incorrect or missing entry type';
-//   }
-// }
-
-// const HealthCheckNewEntry = (incomingObj, newEntry:NewEntry):HealthCheckEntry => {
-//   if('healthCheckRating' in incomingObj){
-//     const HealthCheckEntryNewEntry = {
-//       ...newEntry,
-//       healthCheckRating: parseHealthCheckRating(incomingObj.healthCheckRating)
-//     }
-//     return HealthCheckEntryNewEntry
-//   }
-//   throw new Error('Incorrect data: missing health check rating');
-// }
 
 const parseHealthCheckRating = (x: unknown): HealthCheckRating => {
   if (!Number.isInteger(x)) {
@@ -252,16 +191,17 @@ const parseDischarge = (x: unknown): Discharge => {
     criteria: parseString(x.criteria, 'criteria'),
   };
 };
-const parseSickLeave = (x: unknown): SickLeave => {
+
+const isSickLeave = (x: unknown): x is SickLeave => {
   if (!x || typeof x !== 'object') {
-    throw new Error('incorrect or missing sick leave');
+    return false;
   }
   if (!('startDate' in x) || !('endDate' in x)) {
     throw new Error('incorrect or missing sick leave');
   }
 
-  return {
-    startDate: parseDate(x.startDate),
-    endDate: parseDate(x.endDate),
-  };
+  if (!isString(x.endDate) || !isString(x.startDate)) {
+    return false;
+  }
+  return true;
 };
