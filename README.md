@@ -14,4 +14,4 @@ It serves as an introduction to modern web application development with JavaScri
 ### [Part 5: Testing React apps](core-course-and-extenstions/part5)
 ### [Part 6: Advanced state management](core-course-and-extenstions/part6)
 ### [Part 7: React router, custom hooks, styling app with CSS and webpack](core-course-and-extenstions/part7)
-### [Part 9: TypeScript](typescript\part9)
+### [Part 9: TypeScript](typescript/part9)
