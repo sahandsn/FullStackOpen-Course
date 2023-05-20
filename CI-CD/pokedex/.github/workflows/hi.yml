@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main
-
+      # note that your "main" branch might be called main instead of master
+defaults:
+  run:
+    working-directory: web
 jobs:
   hello_world_job:
     runs-on: ubuntu-20.04
