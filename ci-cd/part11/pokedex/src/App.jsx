@@ -14,11 +14,12 @@ const mapResults = ({ results }) =>
   }))
 
 const App = () => {
+  const lastItem = 50
   const {
     data: pokemonList,
     error,
     isLoading,
-  } = useApi('https://pokeapi.co/api/v2/pokemon/?limit=50', mapResults)
+  } = useApi(`https://pokeapi.co/api/v2/pokemon/?limit=${lastItem}`, mapResults)
   if (isLoading) {
     return <LoadingSpinner />
   }
@@ -38,8 +39,10 @@ const App = () => {
             const pokemonId = pokemonList.find(
               ({ name }) => name === routeParams.match.params.name
             ).id
-            const previous = pokemonList.find(({ id }) => id === pokemonId - 1)
-            const next = pokemonList.find(({ id }) => id === pokemonId + 1)
+            // const previous = pokemonList.find(({ id }) => id === pokemonId - 1)
+            // const next = pokemonList.find(({ id }) => id === pokemonId + 1)
+            const previous = pokemonId===1 ? pokemonList[lastItem-1] : pokemonList.find(({ id }) => id === pokemonId - 1)
+            const next = pokemonId===lastItem ? pokemonList[0] : pokemonList.find(({ id }) => id === pokemonId + 1)
             return (
               <PokemonPage
                 pokemonList={pokemonList}
