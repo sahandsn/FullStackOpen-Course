@@ -7,18 +7,31 @@ on:
 
 jobs:
   sample_deployment_pipeline:
-    name: deployment_pipeline
     runs-on: ubuntu-20.04
     defaults:
       run: 
-        working-directory: CI-CD/pokedex
+        working-directory: ci-cd/pokedex
     steps:
         - uses: actions/checkout@v3
-        - uses: actions/setup-node@v3
+
+        - uses: dorny/paths-filter@v2
+          id: filter
+          with:
+            filters: |
+              CI-CD:
+                - 'CI-CD/**'
+
+        - name: setup node
+          if: steps.filter.outputs.CI-CD == 'true'
+          uses: actions/setup-node@v3
           with:
             node-version: '16'
+
         - name: install dependencies
+          if: steps.filter.outputs.CI-CD == 'true'
           run: npm install
+
         - name: check style (eslint)
+          if: steps.filter.outputs.CI-CD == 'true'
           run: npm run eslint
 
