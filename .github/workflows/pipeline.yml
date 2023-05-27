@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     defaults:
       run: 
-        working-directory: ./ci-cd/part11/pokedex
+        working-directory: ci-cd/part11/pokedex
     steps:
         - uses: actions/checkout@v3
 
