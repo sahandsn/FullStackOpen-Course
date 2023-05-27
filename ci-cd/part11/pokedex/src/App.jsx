@@ -39,8 +39,6 @@ const App = () => {
             const pokemonId = pokemonList.find(
               ({ name }) => name === routeParams.match.params.name
             ).id
-            // const previous = pokemonList.find(({ id }) => id === pokemonId - 1)
-            // const next = pokemonList.find(({ id }) => id === pokemonId + 1)
             const previous = pokemonId===1 ? pokemonList[lastItem-1] : pokemonList.find(({ id }) => id === pokemonId - 1)
             const next = pokemonId===lastItem ? pokemonList[0] : pokemonList.find(({ id }) => id === pokemonId + 1)
             return (
