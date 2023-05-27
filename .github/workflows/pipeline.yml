@@ -22,13 +22,11 @@ jobs:
                 - 'pokedex/**'
 
         - name: setup node
-          if: steps.filter.outputs.changes == 'true'
           uses: actions/setup-node@v3
           with:
             node-version: '16'
 
         - name: install dependencies
-          if: steps.filter.outputs.changes == 'true'
           run: npm install
 
         - name: check style (eslint)
