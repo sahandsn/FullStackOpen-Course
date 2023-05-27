@@ -29,6 +29,14 @@ jobs:
       - name: install dependencies
         run: npm install
 
-      - name: check style (eslint)
+      - name: lint
         if: steps.filter.outputs.pokedex == 'true'
         run: npm run eslint
+
+      - name: build
+        if: steps.filter.outputs.pokedex == 'true'
+        run: npm run build
+
+      - name: test
+        if: steps.filter.outputs.pokedex == 'true'
+        run: npm run test
