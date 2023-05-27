@@ -30,6 +30,6 @@ jobs:
           run: npm install
 
         - name: check style (eslint)
-          if: steps.filter.outputs.pokedex == 'true'
+          if: steps.filter.outputs.changes == 'true'
           run: npm run eslint
 
