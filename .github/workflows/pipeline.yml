@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
     defaults:
       run: 
-        working-directory: ci-cd/part11/pokedex
+        working-directory: ci-cd/part11
     steps:
         - uses: actions/checkout@v3
 
@@ -18,20 +18,20 @@ jobs:
           id: filter
           with:
             filters: |
-              CI-CD:
-                - 'CI-CD/**'
+              pokedex:
+                - 'pokedex/**'
 
         - name: setup node
-          if: steps.filter.outputs.CI-CD == 'true'
+          if: steps.filter.outputs.changes == 'true'
           uses: actions/setup-node@v3
           with:
             node-version: '16'
 
         - name: install dependencies
-          if: steps.filter.outputs.CI-CD == 'true'
+          if: steps.filter.outputs.changes == 'true'
           run: npm install
 
         - name: check style (eslint)
-          if: steps.filter.outputs.CI-CD == 'true'
+          if: steps.filter.outputs.changes == 'true'
           run: npm run eslint
 
