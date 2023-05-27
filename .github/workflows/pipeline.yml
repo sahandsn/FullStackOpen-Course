@@ -18,8 +18,8 @@ jobs:
           id: filter
           with:
             filters: |
-              src:
-                - 'src/**'
+              pokedex:
+                - 'ci-cd/part11/pokedex/**'
 
         - name: setup node
           uses: actions/setup-node@v3
@@ -30,6 +30,6 @@ jobs:
           run: npm install
 
         - name: check style (eslint)
-          if: steps.filter.outputs.src == 'true'
+          if: steps.filter.outputs.pokedex == 'true'
           run: npm run eslint
 
